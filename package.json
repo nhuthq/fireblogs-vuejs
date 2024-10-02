@@ -1,0 +1,25 @@
+{
+  "name": "fire-blogs-vuejs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "core-js": "3.38.1",
+    "quill-image-resize-module": "^3.0.0",
+    "vue": "^3.4.29",
+    "vue-router": "^4.4.5",
+    "vue-svg-loader": "^0.12.0",
+    "vue3-editor": "^0.1.1",
+    "vue3-quill": "0.3.1",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "vite": "^5.3.1"
+  }
+}
