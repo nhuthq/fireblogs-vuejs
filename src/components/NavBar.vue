@@ -1,9 +1,8 @@
 <script>
 import menuIcon from "@/assets/Icons/bars-regular.svg";
-import { RouterLink } from "vue-router";
 
 export default {
-  name: "navigation",
+  name: "Navigation",
   components: {
     menuIcon,
   },
