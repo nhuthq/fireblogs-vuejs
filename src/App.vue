@@ -59,6 +59,15 @@ import { RouterView } from "vue-router";
   }
 }
 
+.blog-card-wrap {
+  position: relative;
+  padding: 80px 16px;
+  background-color: #f1f1f1;
+  @media (min-width: 500px) {
+    padding: 100px 16px;
+  }
+}
+
 .blog-cards {
   display: grid;
   gap: 32px;

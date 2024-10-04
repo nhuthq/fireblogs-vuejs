@@ -3,29 +3,21 @@
     <BlogPost :post="welcomeScreen" />
     <BlogPost
       :post="post"
-      v-for="(post, index) in sampleBlogPost"
+      v-for="(post, index) in sampleBlogPosts"
       :key="index"
     />
-    <!-- <div class="blog-card-wrap">
+    <div class="blog-card-wrap">
       <div class="container">
-        <h3>View More Recent Blogs</h3>
+        <h3>View More Recent Blog</h3>
         <div class="blog-cards">
           <BlogCard
-          :post="post"
-          v-for="(post, index) in mockBlogCards"
-          :key="index"
-        />
+            :post="post"
+            v-for="(post, index) in sampleBlogCards"
+            :key="index"
+          />
         </div>
       </div>
     </div>
-    <div class="updates">
-      <div class="container">
-        <h2>never miss a post. Register for your free account today!</h2>
-        <RouterLink class="router-button" to="#">
-          Register for FireBlogs <Arrow class="arrow arrow-light" />
-        </RouterLink>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -51,7 +43,7 @@ export default {
         cover: "coding_night_thumbnail",
         photo: "coding_thumbnail",
       },
-      sampleBlogPost: [
+      sampleBlogPosts: [
         {
           title: "This is the blog title!",
           content: "This is the blog content",
@@ -61,7 +53,7 @@ export default {
           photo: "harley_thumbnail2",
         },
       ],
-      mockBlogCards: [
+      sampleBlogCards: [
         {
           title: "Blog Card #1",
           cover: "coding_thumbnail",
