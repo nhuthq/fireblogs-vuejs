@@ -8,16 +8,14 @@
         <Delete class="delete" />
       </div>
     </div>
-    <img :src="post.blogCoverPhoto" alt="blog-cover" />
+    <img :src="post.cover" alt="blog-cover" />
     <div class="info">
       <h4>
-        {{ post.blogTitle }}
+        {{ post.title }}
       </h4>
       <h6>
         Posted on:
-        {{
-          new Date(post.blogDate).toLocaleString("en-us", { dateStyle: "long" })
-        }}
+        {{ new Date(post.date).toLocaleString("en-us", { dateStyle: "long" }) }}
       </h6>
       <RouterLink
         class="link"
@@ -30,7 +28,7 @@
 </template>
 
 <script>
-import Arrow from "@/assets/Icons/arrow-right-light-regular.svg";
+import Arrow from "@/assets/Icons/arrow-right-light.svg";
 import Edit from "@/assets/Icons/edit-regular.svg";
 import Delete from "@/assets/Icons/trash-regular.svg";
 import { RouterLink } from "vue-router";
@@ -38,7 +36,7 @@ import { RouterLink } from "vue-router";
 export default {
   name: "BlogCard",
   props: ["post"],
-  components: { Arrow, Edit, Delete },
+  components: { Arrow, Edit, Delete, RouterLink },
   methods: {
     deletePost() {},
     editBlog() {},
