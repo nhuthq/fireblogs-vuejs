@@ -59,6 +59,27 @@ import { RouterView } from "vue-router";
   }
 }
 
+button,
+.router-button {
+  transform: 500ms ease all;
+  cursor: pointer;
+  margin-top: 24px;
+  padding: 12px 24px;
+  background-color: #303030;
+  color: white;
+  border-radius: 20px;
+  border: none;
+  text-transform: uppercase;
+
+  &:focus {
+    outline: navajowhite;
+  }
+
+  &:hover {
+    background-color: rgba(48, 48, 48, 0.7);
+  }
+}
+
 .blog-card-wrap {
   position: relative;
   padding: 80px 16px;
