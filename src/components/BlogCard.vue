@@ -1,28 +1,20 @@
 <template>
   <div class="blog-card">
     <div class="icons">
-      <div @click="editPost" class="icon">
+      <div class="icon">
         <Edit class="edit" />
       </div>
-      <div @click="deletePost" class="icon">
+      <div class="icon">
         <Delete class="delete" />
       </div>
     </div>
-    <img :src="post.cover" alt="blog-cover" />
+    <img src="@/assets/thumbnail/hoian_night_thumbnail.jpg" alt="thumbnail" />
     <div class="info">
-      <h4>
-        {{ post.title }}
-      </h4>
-      <h6>
-        Posted on:
-        {{ new Date(post.date).toLocaleString("en-us", { dateStyle: "long" }) }}
-      </h6>
-      <RouterLink
-        class="link"
-        :to="{ name: 'ViewBlog', params: { blogid: this.blog.blogID } }"
-      >
-        View The Post <Arrow class="arrow" />
-      </RouterLink>
+      <h4>{{ post.title }}</h4>
+      <h6>Posted on: {{ post.date }}</h6>
+      <RouterLink class="link" to="#"
+        >View The Post <Arrow class="arrow"
+      /></RouterLink>
     </div>
   </div>
 </template>
@@ -56,7 +48,7 @@ export default {
   border-radius: 8px;
   background-color: white;
   min-height: 420px;
-  transition: 0.5s ease all;
+  transform: 0.5s ease all;
 
   &:hover {
     transform: rotateZ(-1deg) scale(1.01);
@@ -79,11 +71,10 @@ export default {
       height: 35px;
       border-radius: 50%;
       background-color: white;
-      transition: 0.5s ease all;
+      transform: 0.5s ease all;
 
       &:hover {
         background-color: #303030;
-
         .edit,
         .delete {
           path {
@@ -120,18 +111,18 @@ export default {
     height: 100%;
     z-index: 3;
     padding: 32px 16px;
-    color: black;
+    color: #000;
 
     h4 {
+      padding-bottom: 8px;
       font-size: 20px;
       font-weight: 300;
-      padding-bottom: 8px;
     }
 
     h6 {
-      font-weight: 400;
-      font-size: 12px;
       padding-bottom: 16px;
+      font-size: 12px;
+      font-weight: 400;
     }
 
     .link {
@@ -142,15 +133,15 @@ export default {
       padding-top: 20px;
       font-size: 12px;
       padding-bottom: 4px;
-      transform: 0.5s ease all;
+      transition: 0.5 ease-in all;
+    }
 
-      &:hover {
-        color: rgba(48, 48, 48, 0.8);
-      }
+    &:hover {
+      color: rgba(48, 48, 48, 0.8);
+    }
 
-      .arrow {
-        width: 10px;
-      }
+    .arrow {
+      width: 10px;
     }
   }
 }
