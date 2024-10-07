@@ -15,17 +15,23 @@
       </div>
     </div>
     <div class="blog-photo">
-      <img
-        v-if="post.welcomeScreen"
-        src="@/assets/thumbnail/coding_night_thumbnail.jpg"
-        alt="photo"
-      />
-      <img v-else src="@/assets/thumbnail/coding_thumbnail.jpg" alt="cover" />
+      <img v-if="post.welcomeScreen" :src="getImage(post.photo)" alt="photo" />
+      <img v-else :src="getImage(post.cover)" alt="cover" />
     </div>
   </div>
 </template>
 
 <script>
+// MockData
+import coding from "@/assets/thumbnail/coding.jpg";
+import codingnight from "@/assets/thumbnail/codingnight.jpg";
+import coffee from "@/assets/thumbnail/coffee.jpg";
+import harley from "@/assets/thumbnail/harley.jpg";
+import harley2 from "@/assets/thumbnail/harley2.jpg";
+import photographer from "@/assets/thumbnail/photographer.jpg";
+
+const mockImages = [coding, codingnight, coffee, harley, harley2, photographer];
+
 import { RouterLink } from "vue-router";
 import Arrow from "@/assets/Icons/arrow-right-light.svg";
 export default {
@@ -34,6 +40,12 @@ export default {
   components: {
     Arrow,
     RouterLink,
+  },
+  computed: {},
+  methods: {
+    getImage(imageName) {
+      return mockImages.filter((item) => item === imageName.toLocaleString());
+    },
   },
 };
 </script>

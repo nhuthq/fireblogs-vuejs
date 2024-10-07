@@ -8,7 +8,7 @@
         <Delete class="delete" />
       </div>
     </div>
-    <img src="@/assets/thumbnail/hoian_night_thumbnail.jpg" alt="thumbnail" />
+    <img :src="getImage(post.cover)" alt="thumbnail" />
     <div class="info">
       <h4>{{ post.title }}</h4>
       <h6>Posted on: {{ post.date }}</h6>
@@ -20,10 +20,33 @@
 </template>
 
 <script>
+// MockData
+import danang from "@/assets/thumbnail/danang.jpg";
+import nhatrang from "@/assets/thumbnail/nhatrang.jpg";
+import hoian from "@/assets/thumbnail/hoian.jpg";
+import kyco from "@/assets/thumbnail/kyco.jpg";
+import vungtau from "@/assets/thumbnail/vungtau.jpg";
+import hanoi from "@/assets/thumbnail/hanoi.jpg";
+import hcm from "@/assets/thumbnail/hcm.jpg";
+import phuquoc from "@/assets/thumbnail/phuquoc.jpg";
+import phuquocwonder from "@/assets/thumbnail/phuquocwonder.jpg";
+
 import Arrow from "@/assets/Icons/arrow-right-light.svg";
 import Edit from "@/assets/Icons/edit-regular.svg";
 import Delete from "@/assets/Icons/trash-regular.svg";
 import { RouterLink } from "vue-router";
+
+const mockImages = [
+  danang,
+  nhatrang,
+  hoian,
+  kyco,
+  vungtau,
+  hanoi,
+  hcm,
+  phuquoc,
+  phuquocwonder,
+];
 
 export default {
   name: "BlogCard",
@@ -32,6 +55,9 @@ export default {
   methods: {
     deletePost() {},
     editBlog() {},
+    getImage(imageName) {
+      return mockImages.filter((item) => item === imageName.toLocaleString());
+    },
   },
   computed: {
     editPost() {},

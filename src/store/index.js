@@ -4,24 +4,49 @@ export const store = createStore({
   state: {
     sampleBlogCards: [
       {
-        title: "Blog Card #1",
-        cover: "coding_thumbnail",
+        title: "Nha Trang",
+        cover: "nhatrang",
         date: "Oct 17, 2024",
       },
       {
-        title: "Blog Card #3",
-        cover: "harley_thumbnail",
+        title: "Da Nang",
+        cover: "danang",
         date: "Oct 17, 2024",
       },
       {
-        title: "Blog Card #4",
-        cover: "hcm_city_thumbnail",
-        date: "Oct 17, 2024",
+        title: "Hoi An",
+        cover: "hoian",
+        date: "Oct 19, 2024",
       },
       {
-        title: "Blog Card #5",
-        cover: "photographer_thumbnail",
-        date: "Oct 17, 2024",
+        title: "Ho Chi Minh city",
+        cover: "hcm",
+        date: "Oct 21, 2024",
+      },
+      {
+        title: "Phu Quoc",
+        cover: "phuquoc",
+        date: "Oct 23, 2024",
+      },
+      {
+        title: "Phu Quoc Wonderland",
+        cover: "phuquocwonder",
+        date: "Oct 23, 2024",
+      },
+      {
+        title: "Vung Tau",
+        cover: "vuntau",
+        date: "Oct 25, 2024",
+      },
+      {
+        title: "Ky Co",
+        cover: "kyco",
+        date: "Oct 27, 2024",
+      },
+      {
+        title: "Ha Noi",
+        cover: "hanoi",
+        date: "Oct 30, 2024",
       },
     ],
   },
