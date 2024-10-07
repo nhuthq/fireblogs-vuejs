@@ -48,7 +48,7 @@ export default {
   border-radius: 8px;
   background-color: white;
   min-height: 420px;
-  transform: 0.5s ease all;
+  transition: 0.5s ease all;
 
   &:hover {
     transform: rotateZ(-1deg) scale(1.01);
@@ -71,7 +71,7 @@ export default {
       height: 35px;
       border-radius: 50%;
       background-color: white;
-      transform: 0.5s ease all;
+      transition: 0.5s ease all;
 
       &:hover {
         background-color: #303030;
@@ -133,7 +133,7 @@ export default {
       padding-top: 20px;
       font-size: 12px;
       padding-bottom: 4px;
-      transition: 0.5 ease-in all;
+      transition: 0.5s ease-in all;
     }
 
     &:hover {

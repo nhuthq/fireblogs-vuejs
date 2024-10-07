@@ -1,20 +1,12 @@
 <template>
   <div class="home">
     <BlogPost :post="welcomeScreen" />
-    <BlogPost
-      :post="post"
-      v-for="(post, index) in sampleBlogPosts"
-      :key="index"
-    />
+    <BlogPost :post="post" v-for="(post, index) in sampleBlogPosts" :key="index" />
     <div class="blog-card-wrap">
       <div class="container">
         <h3>View More Recent Blog</h3>
         <div class="blog-cards">
-          <BlogCard
-            :post="post"
-            v-for="(post, index) in sampleBlogCards"
-            :key="index"
-          />
+          <BlogCard :post="post" v-for="(post, index) in sampleBlogCards" :key="index" />
         </div>
       </div>
     </div>
@@ -30,10 +22,13 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
 import { RouterLink } from "vue-router";
 import BlogPost from "@/components/BlogPost.vue";
 import BlogCard from "@/components/BlogCard.vue";
 import Arrow from "@/assets/Icons/arrow-right-light.svg";
+
+const store = useStore();
 
 export default {
   name: "Home",
@@ -49,7 +44,8 @@ export default {
         title: "Welcome!",
         content:
           "Weekly blog articles with all things programming including HTML, CSS, JavaScript and more. Register today to never miss a post!",
-        html: "Weekly blog articles with all things programming including HTML, CSS, JavaScript and more. Register today to never miss a post!",
+        html:
+          "Weekly blog articles with all things programming including HTML, CSS, JavaScript and more. Register today to never miss a post!",
         welcomeScreen: true,
         cover: "coding_night_thumbnail",
         photo: "coding_thumbnail",
@@ -64,34 +60,15 @@ export default {
           photo: "harley_thumbnail2",
         },
       ],
-      sampleBlogCards: [
-        {
-          title: "Blog Card #1",
-          cover: "coding_thumbnail",
-          date: "Oct 17, 2024",
-        },
-        {
-          title: "Blog Card #3",
-          cover: "harley_thumbnail",
-          date: "Oct 17, 2024",
-        },
-        {
-          title: "Blog Card #4",
-          cover: "hcm_city_thumbnail",
-          date: "Oct 17, 2024",
-        },
-        {
-          title: "Blog Card #5",
-          cover: "photographer_thumbnail",
-          date: "Oct 17, 2024",
-        },
-      ],
     };
   },
   computed: {
     blogPostFeed() {},
     blogPostCard() {},
     user() {},
+    sampleBlogCards() {
+      return this.$store.state.sampleBlogCards;
+    },
   },
 };
 </script>
