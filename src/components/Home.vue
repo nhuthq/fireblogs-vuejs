@@ -1,12 +1,20 @@
 <template>
   <div class="home">
     <BlogPost :post="welcomeScreen" />
-    <BlogPost :post="post" v-for="(post, index) in sampleBlogPosts" :key="index" />
+    <BlogPost
+      :post="post"
+      v-for="(post, index) in sampleBlogPosts"
+      :key="index"
+    />
     <div class="blog-card-wrap">
       <div class="container">
         <h3>View More Recent Blog</h3>
         <div class="blog-cards">
-          <BlogCard :post="post" v-for="(post, index) in sampleBlogCards" :key="index" />
+          <BlogCard
+            :post="post"
+            v-for="(post, index) in sampleBlogCards"
+            :key="index"
+          />
         </div>
       </div>
     </div>
@@ -44,11 +52,10 @@ export default {
         title: "Welcome!",
         content:
           "Weekly blog articles with all things programming including HTML, CSS, JavaScript and more. Register today to never miss a post!",
-        html:
-          "Weekly blog articles with all things programming including HTML, CSS, JavaScript and more. Register today to never miss a post!",
+        html: "Weekly blog articles with all things programming including HTML, CSS, JavaScript and more. Register today to never miss a post!",
         welcomeScreen: true,
-        cover: "coding_night_thumbnail",
-        photo: "coding_thumbnail",
+        cover: "coding",
+        photo: "coding",
       },
       sampleBlogPosts: [
         {
@@ -56,8 +63,24 @@ export default {
           content: "This is the blog content",
           welcomeScreen: false,
           html: "This is the blog HTML",
-          cover: "harley_thumbnail",
-          photo: "harley_thumbnail2",
+          cover: "codingnight",
+          photo: "codingnight",
+        },
+        {
+          title: "This is the blog title!",
+          content: "This is the blog content",
+          welcomeScreen: false,
+          html: "This is the blog HTML",
+          cover: "photographer",
+          photo: "photographer",
+        },
+        {
+          title: "This is the blog title!",
+          content: "This is the blog content",
+          welcomeScreen: false,
+          html: "This is the blog HTML",
+          cover: "harley",
+          photo: "harley",
         },
       ],
     };

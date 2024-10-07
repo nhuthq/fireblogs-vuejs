@@ -1,6 +1,6 @@
 <template>
   <div class="blog-card">
-    <div class="icons">
+    <div v-show="editPost" class="icons">
       <div class="icon">
         <Edit class="edit" />
       </div>
@@ -8,7 +8,7 @@
         <Delete class="delete" />
       </div>
     </div>
-    <img src="@/assets/thumbnail/hoian_night_thumbnail.jpg" alt="thumbnail" />
+    <img :src="getImage(post.cover)" alt="thumbnail" />
     <div class="info">
       <h4>{{ post.title }}</h4>
       <h6>Posted on: {{ post.date }}</h6>
@@ -20,6 +20,17 @@
 </template>
 
 <script>
+// MockData
+import danang from "@/assets/thumbnail/danang.jpg";
+import nhatrang from "@/assets/thumbnail/nhatrang.jpg";
+import hoian from "@/assets/thumbnail/hoian.jpg";
+import kyco from "@/assets/thumbnail/kyco.jpg";
+import vungtau from "@/assets/thumbnail/vungtau.jpg";
+import hanoi from "@/assets/thumbnail/hanoi.jpg";
+import hcm from "@/assets/thumbnail/hcm.jpg";
+import phuquoc from "@/assets/thumbnail/phuquoc.jpg";
+import phuquocwonder from "@/assets/thumbnail/phuquocwonder.jpg";
+
 import Arrow from "@/assets/Icons/arrow-right-light.svg";
 import Edit from "@/assets/Icons/edit-regular.svg";
 import Delete from "@/assets/Icons/trash-regular.svg";
@@ -32,9 +43,25 @@ export default {
   methods: {
     deletePost() {},
     editBlog() {},
+    getImage(imageName) {
+      const mockImages = [
+        { name: "danang", value: danang },
+        { name: "nhatrang", value: nhatrang },
+        { name: "hoian", value: hoian },
+        { name: "kyco", value: kyco },
+        { name: "vungtau", value: vungtau },
+        { name: "hanoi", value: hanoi },
+        { name: "hcm", value: hcm },
+        { name: "phuquoc", value: phuquoc },
+        { name: "phuquocwonder", value: phuquocwonder },
+      ];
+      return mockImages.filter((item) => item.name === imageName)[0].value;
+    },
   },
   computed: {
-    editPost() {},
+    editPost() {
+      return this.$store.state.editPost;
+    },
   },
 };
 </script>

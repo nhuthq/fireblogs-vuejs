@@ -8,13 +8,19 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
+      name: "Home",
       component: Home,
+      meta: {
+        title: "Home",
+      },
     },
     {
       path: "/blogs",
-      name: "blogs",
+      name: "Blogs",
       component: Blogs,
+      meta: {
+        title: "Blogs",
+      },
     },
     {
       path: "/:catchAll(.*)",
@@ -22,6 +28,11 @@ const router = createRouter({
       component: NotFoundView,
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  document.title = `${to.meta.title} | FireBlogs`;
+  next();
 });
 
 export default router;
