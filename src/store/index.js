@@ -19,7 +19,7 @@ export const store = createStore({
         date: "Oct 19, 2024",
       },
       {
-        title: "Ho Chi Minh city",
+        title: "Ho Chi Minh",
         cover: "hcm",
         date: "Oct 21, 2024",
       },
@@ -53,7 +53,6 @@ export const store = createStore({
   },
   mutations: {
     toggleEditPost(state, payload) {
-      console.log("HERE:", payload);
       state.editPost = payload;
     },
   },
