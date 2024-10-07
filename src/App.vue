@@ -1,15 +1,50 @@
-<script setup>
+<script>
 import NavBar from "./components/NavBar.vue";
 import Footer from "./components/Footer.vue";
 import { RouterView } from "vue-router";
+
+export default {
+  name: "App",
+  data() {
+    return {
+      navigation: null,
+    };
+  },
+  components: {
+    NavBar,
+    Footer,
+    RouterView,
+  },
+  methods: {
+    checkRoute() {
+      if (
+        this.$route.name === "Login" ||
+        this.$route.name === "Register" ||
+        this.$route.name === "ForgotPassword"
+      ) {
+        this.navigation = false;
+        return;
+      }
+      this.navigation = true;
+    },
+  },
+  created() {
+    this.checkRoute();
+  },
+  watch: {
+    $route() {
+      this.checkRoute();
+    },
+  },
+};
 </script>
 
 <template>
   <div>
     <div class="app">
-      <NavBar />
+      <NavBar v-if="navigation" />
       <RouterView />
-      <Footer />
+      <Footer v-if="navigation"/>
     </div>
   </div>
 </template>
