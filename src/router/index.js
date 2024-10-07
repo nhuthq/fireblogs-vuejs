@@ -43,7 +43,7 @@ const router = createRouter({
     },
     {
       path: "/forgot-password",
-      name: "FogotPassword",
+      name: "ForgotPassword",
       component: ForgotPassword,
       meta: {
         title: "Fogot Password",
