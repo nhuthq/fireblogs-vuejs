@@ -30,8 +30,6 @@ import harley from "@/assets/thumbnail/harley.jpg";
 import harley2 from "@/assets/thumbnail/harley2.jpg";
 import photographer from "@/assets/thumbnail/photographer.jpg";
 
-const mockImages = [coding, codingnight, coffee, harley, harley2, photographer];
-
 import { RouterLink } from "vue-router";
 import Arrow from "@/assets/Icons/arrow-right-light.svg";
 export default {
@@ -44,7 +42,15 @@ export default {
   computed: {},
   methods: {
     getImage(imageName) {
-      return mockImages.filter((item) => item === imageName.toLocaleString());
+      const mockImages = [
+        { name: "coding", value: coding },
+        { name: "codingnight", value: codingnight },
+        { name: "coffee", value: coffee },
+        { name: "harley", value: harley },
+        { name: "harley2", value: harley2 },
+        { name: "photographer", value: photographer },
+      ];
+      return mockImages.filter((item) => item.name === imageName)[0].value;
     },
   },
 };

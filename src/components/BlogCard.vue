@@ -36,18 +36,6 @@ import Edit from "@/assets/Icons/edit-regular.svg";
 import Delete from "@/assets/Icons/trash-regular.svg";
 import { RouterLink } from "vue-router";
 
-const mockImages = [
-  danang,
-  nhatrang,
-  hoian,
-  kyco,
-  vungtau,
-  hanoi,
-  hcm,
-  phuquoc,
-  phuquocwonder,
-];
-
 export default {
   name: "BlogCard",
   props: ["post"],
@@ -56,7 +44,18 @@ export default {
     deletePost() {},
     editBlog() {},
     getImage(imageName) {
-      return mockImages.filter((item) => item === imageName.toLocaleString());
+      const mockImages = [
+        { name: "danang", value: danang },
+        { name: "nhatrang", value: nhatrang },
+        { name: "hoian", value: hoian },
+        { name: "kyco", value: kyco },
+        { name: "vungtau", value: vungtau },
+        { name: "hanoi", value: hanoi },
+        { name: "hcm", value: hcm },
+        { name: "phuquoc", value: phuquoc },
+        { name: "phuquocwonder", value: phuquocwonder },
+      ];
+      return mockImages.filter((item) => item.name === imageName)[0].value;
     },
   },
   computed: {

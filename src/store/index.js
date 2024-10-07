@@ -35,7 +35,7 @@ export const store = createStore({
       },
       {
         title: "Vung Tau",
-        cover: "vuntau",
+        cover: "vungtau",
         date: "Oct 25, 2024",
       },
       {
