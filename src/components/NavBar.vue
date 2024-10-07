@@ -1,10 +1,14 @@
 <script>
+import { RouterLink, useRoute } from "vue-router";
 import menuIcon from "@/assets/Icons/bars-regular.svg";
+import { computed } from "vue";
 
 export default {
   name: "Navigation",
+  setup() {},
   components: {
     menuIcon,
+    RouterLink,
   },
   data() {
     return {
@@ -28,6 +32,10 @@ export default {
       this.mobileNav = false;
       return;
     },
+    isActiveLink(routePath) {
+      const route = useRoute();
+      return route.path === routePath;
+    },
 
     toggleMobileNav() {
       this.mobileNav = !this.mobileNav;
@@ -40,12 +48,22 @@ export default {
   <header>
     <nav class="container">
       <div class="branding">
-        <RouterLink class="header" :to="'/'">Fire Blogs</RouterLink>
+        <RouterLink class="header" :to="{ name: 'Home' }"
+          >Fire Blogs</RouterLink
+        >
       </div>
       <div class="nav-link">
         <ul v-show="!mobile">
-          <RouterLink class="link" :to="'/'">Home</RouterLink>
-          <RouterLink class="link" :to="'/blogs'">Blogs</RouterLink>
+          <RouterLink
+            :class="[isActiveLink('/') ? 'link link-active' : 'link']"
+            :to="{ name: 'Home' }"
+            >Home</RouterLink
+          >
+          <RouterLink
+            :class="[isActiveLink('/blogs') ? 'link link-active' : 'link']"
+            :to="{ name: 'Blogs' }"
+            >Blogs</RouterLink
+          >
           <RouterLink class="link" to="#">Create Post</RouterLink>
           <RouterLink class="link" to="#">Login/Register</RouterLink>
         </ul>
@@ -54,8 +72,16 @@ export default {
     <menuIcon @click="toggleMobileNav" class="menu-icon" v-show="mobile" />
     <Transition name="mobile-nav">
       <ul class="mobile-nav" v-show="mobileNav">
-        <RouterLink class="link" to="#">Home</RouterLink>
-        <RouterLink class="link" to="#">Blogs</RouterLink>
+        <RouterLink
+          :class="[isActiveLink('/') ? 'link link-active' : 'link']"
+          :to="{ name: 'Home' }"
+          >Home</RouterLink
+        >
+        <RouterLink
+          :class="[isActiveLink('/blogs') ? 'link link-active' : 'link']"
+          :to="{ name: 'Blogs' }"
+          >Blogs</RouterLink
+        >
         <RouterLink class="link" to="#">Create Post</RouterLink>
         <RouterLink class="link" to="#">Login/Register</RouterLink>
       </ul>
@@ -64,6 +90,9 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@mixin link($color: black) {
+  color: $color;
+}
 header {
   background-color: #fff;
   padding: 0 25px;
@@ -74,10 +103,15 @@ header {
   .link {
     font-weight: 500;
     padding: 0 8px;
+    @include link($color: black);
     transition: 0.3s color ease;
 
     &:hover {
       color: #1eb8b8;
+    }
+
+    &.link-active {
+      @include link($color: #1eb8b8);
     }
   }
 
@@ -144,6 +178,9 @@ header {
       color: #fff;
       &:hover {
         color: #1eb8b8;
+      }
+      &.link-active {
+        @include link($color: #1eb8b8);
       }
     }
   }

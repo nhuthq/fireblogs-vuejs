@@ -49,8 +49,14 @@ export const store = createStore({
         date: "Oct 30, 2024",
       },
     ],
+    editPost: null,
   },
-  mutations: {},
+  mutations: {
+    toggleEditPost(state, payload) {
+      console.log("HERE:", payload);
+      state.editPost = payload;
+    },
+  },
   actions: {},
   modules: {},
 });
