@@ -40,12 +40,12 @@ export default {
   <header>
     <nav class="container">
       <div class="branding">
-        <RouterLink class="header">Fire Blogs</RouterLink>
+        <RouterLink class="header" :to="'/'">Fire Blogs</RouterLink>
       </div>
       <div class="nav-link">
         <ul v-show="!mobile">
-          <RouterLink class="link" to="#">Home</RouterLink>
-          <RouterLink class="link" to="#">Blogs</RouterLink>
+          <RouterLink class="link" :to="'/'">Home</RouterLink>
+          <RouterLink class="link" :to="'/blogs'">Blogs</RouterLink>
           <RouterLink class="link" to="#">Create Post</RouterLink>
           <RouterLink class="link" to="#">Login/Register</RouterLink>
         </ul>
