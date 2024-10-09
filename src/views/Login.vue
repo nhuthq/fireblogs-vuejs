@@ -1,11 +1,9 @@
 <template>
   <div class="form-wrap">
-    <form class="login">
+    <form class="register">
       <p class="login-register">
-        Donn't have an account?
-        <RouterLink class="router-link" :to="{ name: 'Register' }"
-          >Register</RouterLink
-        >
+        Don't have an account?
+        <RouterLink class="router-link" :to="{ name: 'Register' }">Register</RouterLink>
       </p>
       <h2>Login to FireBlogs</h2>
       <div class="inputs">
@@ -123,7 +121,7 @@ export default {
       text-decoration: none;
       color: #000;
       cursor: pointer;
-      font-size:  14px;;
+      font-size: 14px;
       margin: 16px 0 32px;
       border-bottom: 1px solid transparent;
       transition: 0.5s ease all;

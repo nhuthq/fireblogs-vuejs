@@ -1,5 +1,43 @@
 <template>
-  <h1>Forgot Password</h1>
+  <div class="reset-password">
+    <div class="form-wrap">
+      <form class="reset">
+        <h2>Reset Password</h2>
+        <p>Forgo your password? Enter your email to reset it</p>
+        <div class="inputs">
+          <div class="input">
+            <input type="text" placeholder="Email" v-model="email" />
+            <Email class="icon" />
+          </div>
+        </div>
+        <button>Reset</button>
+        <div class="angle"></div>
+      </form>
+      <div class="background"></div>
+    </div>
+  </div>
 </template>
-<script></script>
-<style lang="scss"></style>
+
+<script>
+import Email from "@/assets/Icons/envelope-regular.svg";
+export default {
+  name: "ForgotPassword",
+  components: { Email },
+};
+</script>
+<style lang="scss">
+.reset-password {
+  position: relative;
+  .form-wrap {
+    .reset {
+      h2 {
+        margin-bottom: 8px;
+      }
+      p {
+        margin-bottom: 32px;
+        text-align: center;
+      }
+    }
+  }
+}
+</style>
