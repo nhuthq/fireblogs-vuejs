@@ -73,7 +73,7 @@ export default {
       userName: "",
       email: "",
       password: "",
-      error: "",
+      error: false,
       errorMessage: "",
       loading: false,
       modalActive: false,

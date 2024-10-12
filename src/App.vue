@@ -2,6 +2,7 @@
 import NavBar from "./components/NavBar.vue";
 import Footer from "./components/Footer.vue";
 import { RouterView } from "vue-router";
+import { firebaseAuth } from "@/firebase/firebaseInit";
 
 export default {
   name: "App",
@@ -30,6 +31,9 @@ export default {
   },
   created() {
     this.checkRoute();
+    setTimeout(() => {
+      console.log("LOGIN SUCCESS: ", firebaseAuth.currentUser.uid);
+    }, 2000);
   },
   watch: {
     $route() {

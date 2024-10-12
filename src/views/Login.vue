@@ -1,5 +1,6 @@
 <template>
   <div class="form-wrap">
+    <Loading v-if="loading" />
     <form class="register">
       <p class="login-register">
         Don't have an account?
@@ -21,7 +22,8 @@
       <RouterLink class="forgot-password" :to="{ name: 'ForgotPassword' }"
         >Forgot Password</RouterLink
       >
-      <button>Sign In</button>
+      <div v-show="error" class="error">{{ this.errorMessage }}</div>
+      <button @click.prevent="signin">Sign In</button>
       <div class="angle"></div>
     </form>
     <div class="background"></div>
@@ -29,6 +31,11 @@
 </template>
 
 <script>
+import {
+  firebaseAuth,
+  signInWithEmailAndPassword,
+} from "@/firebase/firebaseInit";
+import Loading from "@/components/Loading.vue";
 import Email from "@/assets/Icons/envelope-regular.svg";
 import Password from "@/assets/Icons/lock-alt-solid.svg";
 export default {
@@ -36,12 +43,50 @@ export default {
   components: {
     Email,
     Password,
+    Loading,
   },
   data() {
     return {
-      email: null,
-      password: null,
+      email: "",
+      password: "",
+      loading: false,
+      error: false,
+      errorMessage: "",
     };
+  },
+  methods: {
+    async signin() {
+      if (this.email === "" || this.password === "") {
+        this.error = true;
+        this.errorMessage = "Please fill out all the fields";
+        return;
+      }
+      this.loading = true;
+      await signInWithEmailAndPassword(firebaseAuth, this.email, this.password)
+        .then(() => {
+          this.error = false;
+          this.loading = false;
+          this.$router.push({ name: "Home" });
+        })
+        .catch((error) => {
+          switch (error.code) {
+            case "auth/invalid-email":
+              this.errorMessage = "Invalid email";
+              break;
+            case "auth/user-not-found":
+              this.errorMessage = "No account with that email was found";
+              break;
+            case "auth/wrong-password":
+              this.errorMessage = "Incorrect password";
+              break;
+            default:
+              this.errorMessage = "Email or password was incorrect";
+              break;
+          }
+          this.error = true;
+          this.loading = false;
+        });
+    },
   },
 };
 </script>
