@@ -3,7 +3,9 @@
     <form class="register">
       <p class="login-register">
         Don't have an account?
-        <RouterLink class="router-link" :to="{ name: 'Register' }">Register</RouterLink>
+        <RouterLink class="router-link" :to="{ name: 'Register' }"
+          >Register</RouterLink
+        >
       </p>
       <h2>Login to FireBlogs</h2>
       <div class="inputs">

@@ -44,7 +44,7 @@ export default {
     <div class="app">
       <NavBar v-if="navigation" />
       <RouterView />
-      <Footer v-if="navigation"/>
+      <Footer v-if="navigation" />
     </div>
   </div>
 </template>
@@ -113,6 +113,12 @@ button,
   &:hover {
     background-color: rgba(48, 48, 48, 0.7);
   }
+}
+
+.error {
+  text-align: center;
+  font-size: 12px;
+  color: red;
 }
 
 .blog-card-wrap {
