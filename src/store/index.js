@@ -1,4 +1,6 @@
 import { createStore } from "vuex";
+import { firestoreDB, firebaseAuth } from "@/firebase/firebaseInit";
+import { doc, collection, getDoc } from "firebase/firestore";
 
 export const store = createStore({
   state: {
@@ -50,12 +52,53 @@ export const store = createStore({
       },
     ],
     editPost: null,
+    user: null,
+    profileId: null,
+    profileEmail: null,
+    profileFirstName: null,
+    profileLastName: null,
+    profileUserName: null,
+    profileInitials: null,
   },
   mutations: {
     toggleEditPost(state, payload) {
       state.editPost = payload;
     },
+    updateUser(state, payload) {
+      state.user = payload;
+      console.log("updateUser:", payload);
+    },
+    setProfileInfo(state, userData) {
+      state.profileId = userData.id;
+      state.profileEmail = userData.data().email;
+      state.profileFirstName = userData.data().firstName;
+      state.profileLastName = userData.data().lastName;
+      state.profileUserName = userData.data().userName;
+    },
+    setProfileInitials(state) {
+      state.profileInitials =
+        state.profileFirstName.match(/(\b\S)?/g).join("") +
+        state.profileLastName.match(/(\b\S)?/g).join("");
+    },
   },
-  actions: {},
+  actions: {
+    async getCurrentUser({ commit }) {
+      const docRef = doc(firestoreDB, "users", firebaseAuth.currentUser.uid);
+
+      await getDoc(docRef)
+        .then((data) => {
+          if (data.exists) {
+            const userData = data;
+            commit("setProfileInfo", userData);
+            commit("setProfileInitials");
+          } else {
+            console.log("No such document!");
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting document:", error);
+        });
+    },
+  },
   modules: {},
 });

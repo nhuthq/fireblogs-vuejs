@@ -31,9 +31,14 @@ export default {
   },
   created() {
     this.checkRoute();
-    setTimeout(() => {
-      console.log("LOGIN SUCCESS: ", firebaseAuth.currentUser.uid);
-    }, 2000);
+
+    firebaseAuth.onAuthStateChanged((user) => {
+      this.$store.commit("updateUser", user);
+      if (user) {
+        this.$store.dispatch("getCurrentUser");
+        console.log("CURRENT USER EMAIL:", this.$store.state.profileEmail);
+      }
+    });
   },
   watch: {
     $route() {

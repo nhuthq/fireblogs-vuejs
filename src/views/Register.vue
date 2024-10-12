@@ -49,7 +49,7 @@ import {
   firebaseAuth,
   createUserWithEmailAndPassword,
 } from "@/firebase/firebaseInit";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 import Modal from "@/components/Modal.vue";
 import Loading from "@/components/Loading.vue";
@@ -106,16 +106,19 @@ export default {
       )
         .then(async () => {
           try {
-            const docRef = await addDoc(collection(firestoreDB, "users"), {
+            const userID = firebaseAuth.currentUser.uid;
+            const data = {
               firstName: this.firstName,
               lastName: this.lastName,
               userName: this.userName,
               email: this.email,
+            };
+            const docRef = doc(firestoreDB, "users", userID);
+            await setDoc(docRef, data, { merge: true }).then((respone) => {
+              this.loading = false;
+              this.modalActive = true;
+              console.log("Document written with ID: ", respone);
             });
-
-            this.loading = false;
-            this.modalActive = true;
-            console.log("Document written with ID: ", docRef.id);
           } catch (e) {
             this.error = true;
             this.loading = false;
