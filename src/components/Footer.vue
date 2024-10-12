@@ -22,16 +22,18 @@
         <div class="col-2">
           <ul>
             <li>
-              <RouterLink class="link" :to="'/'">Home</RouterLink>
+              <RouterLink class="link" :to="{ name: 'Home' }">Home</RouterLink>
             </li>
             <li>
-              <RouterLink class="link" :to="'/blogs'">Blogs</RouterLink>
+              <RouterLink class="link" :to="{ name: 'Blogs' }"
+                >Blogs</RouterLink
+              >
             </li>
             <li>
-              <RouterLink class="link" :to="'/'">Create Post</RouterLink>
+              <RouterLink class="link" :to="'#'">Create Post</RouterLink>
             </li>
             <li>
-              <RouterLink class="link" :to="'/'"
+              <RouterLink class="link" :to="{ name: 'Login' }"
                 >Login In / Register</RouterLink
               >
             </li>

@@ -1,15 +1,59 @@
-<script setup>
+<script>
 import NavBar from "./components/NavBar.vue";
 import Footer from "./components/Footer.vue";
 import { RouterView } from "vue-router";
+import { firebaseAuth } from "@/firebase/firebaseInit";
+
+export default {
+  name: "App",
+  data() {
+    return {
+      navigation: null,
+    };
+  },
+  components: {
+    NavBar,
+    Footer,
+    RouterView,
+  },
+  methods: {
+    checkRoute() {
+      if (
+        this.$route.name === "Login" ||
+        this.$route.name === "Register" ||
+        this.$route.name === "ForgotPassword"
+      ) {
+        this.navigation = false;
+        return;
+      }
+      this.navigation = true;
+    },
+  },
+  created() {
+    this.checkRoute();
+
+    firebaseAuth.onAuthStateChanged((user) => {
+      this.$store.commit("updateUser", user);
+      if (user) {
+        this.$store.dispatch("getCurrentUser");
+        console.log("CURRENT USER EMAIL:", this.$store.state.profileEmail);
+      }
+    });
+  },
+  watch: {
+    $route() {
+      this.checkRoute();
+    },
+  },
+};
 </script>
 
 <template>
   <div>
     <div class="app">
-      <NavBar />
+      <NavBar v-if="navigation" />
       <RouterView />
-      <Footer />
+      <Footer v-if="navigation" />
     </div>
   </div>
 </template>
@@ -78,6 +122,12 @@ button,
   &:hover {
     background-color: rgba(48, 48, 48, 0.7);
   }
+}
+
+.error {
+  text-align: center;
+  font-size: 12px;
+  color: red;
 }
 
 .blog-card-wrap {

@@ -21,7 +21,7 @@
     <div class="updates">
       <div class="container">
         <h2>Never miss a post. Register for your free account today!</h2>
-        <RouterLink class="router-button" to="#">
+        <RouterLink class="router-button" :to="{ name: 'Login' }">
           Register for FireBlogs <Arrow class="arrow arrow-light" />
         </RouterLink>
       </div>

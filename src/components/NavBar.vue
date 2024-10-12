@@ -64,8 +64,10 @@ export default {
             :to="{ name: 'Blogs' }"
             >Blogs</RouterLink
           >
-          <RouterLink class="link" to="#">Create Post</RouterLink>
-          <RouterLink class="link" to="#">Login/Register</RouterLink>
+          <RouterLink class="link">Create Post</RouterLink>
+          <RouterLink class="link" :to="{ name: 'Login' }"
+            >Login/Register</RouterLink
+          >
         </ul>
       </div>
     </nav>
@@ -83,7 +85,9 @@ export default {
           >Blogs</RouterLink
         >
         <RouterLink class="link" to="#">Create Post</RouterLink>
-        <RouterLink class="link" to="#">Login/Register</RouterLink>
+        <RouterLink class="link" :to="{ name: 'Login' }"
+          >Login/Register</RouterLink
+        >
       </ul>
     </Transition>
   </header>

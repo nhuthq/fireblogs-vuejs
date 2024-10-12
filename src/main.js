@@ -1,5 +1,7 @@
 import { store } from "./store";
 import { createApp } from "vue";
+import { onAuthStateChanged } from "@/firebase/firebaseInit";
+
 import App from "./App.vue";
 import router from "./router";
 

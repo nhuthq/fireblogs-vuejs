@@ -1,17 +1,44 @@
-import firebase from "firebase/app";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
+import {
+  getAuth,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAGXtbG0_b_8kkWdO8CVkMJyi2A8x6BLb8",
-  authDomain: "fir-blogs-ai-app.firebaseapp.com",
-  projectId: "fir-blogs-ai-app",
-  storageBucket: "fir-blogs-ai-app.appspot.com",
-  messagingSenderId: "998918065229",
-  appId: "1:998918065229:web:892d1e435edc5bf48ee004",
+  apiKey: "AIzaSyDQ8LHDlfeRo0JLoZYRv7hiEaJ2taAkufQ",
+  authDomain: "fire-blog-vuejs.firebaseapp.com",
+  projectId: "fire-blog-vuejs",
+  storageBucket: "fire-blog-vuejs.appspot.com",
+  messagingSenderId: "164455781445",
+  appId: "1:164455781445:web:519327390e31b5e0867f2c",
+  measurementId: "G-FB4RRYQWZ7",
 };
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const timestamp = firebase.firestore.FieldValue.serverTimestamp;
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
 
-export { timestamp };
-export default firebase.firestore();
+// Analytics
+const firebaseAnalytics = getAnalytics(firebaseApp);
+
+// FireStore
+const firestoreDB = getFirestore(firebaseApp);
+
+// FireAuth
+const firebaseAuth = getAuth();
+
+export {
+  firebaseAuth,
+  firebaseApp,
+  firebaseAnalytics,
+  firestoreDB,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+};
