@@ -33,7 +33,7 @@
               <RouterLink class="link" :to="'#'">Create Post</RouterLink>
             </li>
             <li>
-              <RouterLink class="link" :to="{ name: 'Login' }"
+              <RouterLink v-if="!user" class="link" :to="{ name: 'Login' }"
                 >Login In / Register</RouterLink
               >
             </li>
@@ -60,6 +60,11 @@ export default {
     twitter,
     instagram,
     linkedin,
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
   },
 };
 </script>
