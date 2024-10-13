@@ -56,6 +56,11 @@ export default {
       window.location.reload();
     },
   },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+  },
 };
 </script>
 
@@ -80,11 +85,16 @@ export default {
             >Blogs</RouterLink
           >
           <RouterLink class="link">Create Post</RouterLink>
-          <RouterLink class="link" :to="{ name: 'Login' }"
+          <RouterLink v-if="!user" class="link" :to="{ name: 'Login' }"
             >Login/Register</RouterLink
           >
         </ul>
-        <div @click="toggleProfileMenu" class="profile" ref="profile">
+        <div
+          v-if="user"
+          @click="toggleProfileMenu"
+          class="profile"
+          ref="profile"
+        >
           <span>{{ this.$store.state.profileInitials }}</span>
           <div v-show="toggleProfile" class="profile-menu">
             <div class="info">
@@ -138,7 +148,7 @@ export default {
           >Blogs</RouterLink
         >
         <RouterLink class="link" to="#">Create Post</RouterLink>
-        <RouterLink class="link" :to="{ name: 'Login' }"
+        <RouterLink v-show="!user" class="link" :to="{ name: 'Login' }"
           >Login/Register</RouterLink
         >
       </ul>
