@@ -20,13 +20,13 @@ export default {
 
 <style lang="scss" scoped>
 .modal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 101;
-  position: absolute;
-  width: 100%;
-  height: 100%;
   top: 0;
   background-color: rgba(0, 0, 0, 0.7);
 

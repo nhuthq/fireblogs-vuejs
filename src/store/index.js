@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 import { firestoreDB, firebaseAuth } from "@/firebase/firebaseInit";
-import { doc, collection, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
 export const store = createStore({
   state: {
@@ -80,6 +80,15 @@ export const store = createStore({
         state.profileFirstName.match(/(\b\S)?/g).join("") +
         state.profileLastName.match(/(\b\S)?/g).join("");
     },
+    changeFirstName(state, payload) {
+      state.profileFirstName = payload;
+    },
+    changeLastName(state, payload) {
+      state.profileLastName = payload;
+    },
+    changeUserName(state, payload) {
+      state.profileUserName = payload;
+    },
   },
   actions: {
     async getCurrentUser({ commit }) {
@@ -98,6 +107,24 @@ export const store = createStore({
         .catch((error) => {
           console.log("Error getting document:", error);
         });
+    },
+    async updateUserSettings({ commit, state }) {
+      const data = {
+        firstName: state.profileFirstName,
+        lastName: state.profileLastName,
+        userName: state.profileUserName,
+      };
+      const userId = firebaseAuth.currentUser.uid;
+      const docRef = doc(firestoreDB, "users", userId);
+
+      await setDoc(docRef, data, { merge: true })
+        .then((respone) => {
+          console.log("Document update with ID: ", respone);
+        })
+        .catch((error) => {
+          console.log("Error getting document:", error);
+        });
+      commit("setProfileInitials");
     },
   },
   modules: {},
