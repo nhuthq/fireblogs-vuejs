@@ -112,7 +112,7 @@ export default {
             </div>
             <div class="options">
               <div class="option">
-                <RouterLink class="option" to="#">
+                <RouterLink class="option" :to="{ name: 'Profile' }">
                   <UserIcon class="icon" />
                   <p>Profile</p>
                 </RouterLink>

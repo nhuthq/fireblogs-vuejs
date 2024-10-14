@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import Home from "@/views/Home.vue";
 import Blogs from "@/views/Blogs.vue";
 import Login from "@/views/Login.vue";
+import Profile from "@/views/Profile.vue";
 import Register from "@/views/Register.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 import ForgotPassword from "@/views/ForgotPassword.vue";
@@ -47,6 +48,14 @@ const router = createRouter({
       component: ForgotPassword,
       meta: {
         title: "Fogot Password",
+      },
+    },
+    {
+      path: "/profile",
+      name: "Profile",
+      component: Profile,
+      meta: {
+        title: "Profile",
       },
     },
     {
