@@ -30,10 +30,12 @@
               >
             </li>
             <li>
-              <RouterLink class="link" :to="'#'">Create Post</RouterLink>
+              <RouterLink v-show="isAdmin" class="link" :to="'#'"
+                >Create Post</RouterLink
+              >
             </li>
             <li>
-              <RouterLink v-if="!user" class="link" :to="{ name: 'Login' }"
+              <RouterLink v-show="!user" class="link" :to="{ name: 'Login' }"
                 >Login In / Register</RouterLink
               >
             </li>
@@ -64,6 +66,9 @@ export default {
   computed: {
     user() {
       return this.$store.state.user;
+    },
+    isAdmin() {
+      return this.$store.state.profileAdmin;
     },
   },
 };

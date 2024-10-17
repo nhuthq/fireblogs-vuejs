@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import Home from "@/views/Home.vue";
 import Blogs from "@/views/Blogs.vue";
 import Login from "@/views/Login.vue";
+import Admin from "@/views/Admin.vue";
 import Profile from "@/views/Profile.vue";
 import Register from "@/views/Register.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
@@ -56,6 +57,14 @@ const router = createRouter({
       component: Profile,
       meta: {
         title: "Profile",
+      },
+    },
+    {
+      path: "/admin",
+      name: "Admin",
+      component: Admin,
+      meta: {
+        title: "Admin",
       },
     },
     {

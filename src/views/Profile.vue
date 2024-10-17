@@ -39,6 +39,7 @@
 import Modal from "@/components/Modal.vue";
 import AdminIcon from "@/assets/Icons/user-crown-light.svg";
 export default {
+  name: "Profile",
   components: {
     Modal,
     AdminIcon,
