@@ -1,7 +1,7 @@
 <template>
   <div class="blog-card-wrap">
     <div class="blog-cards container">
-      <div class="toggle-edit">
+      <div v-show="isAdmin" class="toggle-edit">
         <span>Toggle Editing Post</span>
         <input type="checkbox" v-model="editPost" />
       </div class="blog-cards">
@@ -32,10 +32,13 @@ export default {
         this.$store.commit("toggleEditPost", payload);
       },
     },
+    isAdmin() {
+      return this.$store.state.profileAdmin;
+    },
   },
   beforeRouteLeave () {
-  this.$store.commit("toggleEditPost", false);},
-  
+    this.$store.commit("toggleEditPost", false);
+  },
 };
 </script> 
 

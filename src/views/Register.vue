@@ -1,11 +1,12 @@
 <template>
   <div class="form-wrap">
+    <Loading v-if="loading" />
     <Modal
       v-if="modalActive"
       v-on:close-modal="closeModal"
       :modalMessage="resgisterSuccessMessage"
     />
-    <Loading v-if="loading" />
+
     <form class="register">
       <p class="login-register">
         Already have an account?

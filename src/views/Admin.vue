@@ -1,5 +1,11 @@
 <template>
   <div class="admin">
+    <Loading v-if="loading" />
+    <Modal
+      v-if="modalActive"
+      v-on:close-modal="closeModal"
+      :modalMessage="resgisterSuccessMessage"
+    />
     <div class="container">
       <h2>Administration</h2>
       <div class="admin-info">
@@ -8,28 +14,85 @@
           <input
             placeholder="Enter user email to make them an admin"
             type="text"
-            id="addAdmins"
+            id="addAdmin"
             v-model="adminEmail"
+            :disabled="!isAdmin"
           />
         </div>
         <span>{{ this.functionMsg }}</span>
-        <button @click="addAdmin" class="button">Submit</button>
+        <div v-show="error" class="error">{{ this.errorMessage }}</div>
+        <button @click.prevent="addAdmin" class="button" v-show="isAdmin">
+          Submit
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {
+  firebaseAuth,
+  signInWithEmailAndPassword,
+} from "@/firebase/firebaseInit";
+import Modal from "@/components/Modal.vue";
+import Loading from "@/components/Loading.vue";
 export default {
   name: "Admin",
+  components: {
+    Modal,
+    Loading,
+  },
   data() {
     return {
-      addminEmail: "",
+      adminEmail: "",
+      modalMessage: "Email Add Successfully!",
+      errorMessage: "",
+      error: false,
       functionMsg: null,
+      modalActive: false,
     };
   },
   methods: {
-    addAdmin() {},
+    async addAdmin() {
+      if (this.adminEmail === "") {
+        this.error = true;
+        this.errorMessage = "Please fill out all the fields";
+        return;
+      }
+      this.loading = true;
+      await signInWithEmailAndPassword(firebaseAuth, this.email)
+        .then(() => {
+          this.error = false;
+          this.loading = false;
+          this.modalActive = true;
+        })
+        .catch((error) => {
+          switch (error.code) {
+            case "auth/invalid-email":
+              this.errorMessage = "Invalid email";
+              break;
+            case "auth/user-not-found":
+              this.errorMessage = "No account with that email was found";
+              break;
+            case "auth/wrong-password":
+              this.errorMessage = "Incorrect password";
+              break;
+            default:
+              this.errorMessage = "Email was incorrect";
+              break;
+          }
+          this.error = true;
+          this.loading = false;
+        });
+    },
+    closeModal() {
+      this.modalActive = !this.modalActive;
+    },
+  },
+  computed: {
+    isAdmin() {
+      return this.$store.state.profileAdmin;
+    },
   },
 };
 </script>

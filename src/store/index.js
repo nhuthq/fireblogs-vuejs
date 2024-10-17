@@ -51,9 +51,10 @@ export const store = createStore({
         date: "Oct 30, 2024",
       },
     ],
-    editPost: null,
     user: null,
+    editPost: null,
     profileId: null,
+    profileAdmin: null,
     profileEmail: null,
     profileFirstName: null,
     profileLastName: null,
@@ -71,6 +72,7 @@ export const store = createStore({
     setProfileInfo(state, userData) {
       state.profileId = userData.id;
       state.profileEmail = userData.data().email;
+      state.profileAdmin = userData.data().isAdmin;
       state.profileFirstName = userData.data().firstName;
       state.profileLastName = userData.data().lastName;
       state.profileUserName = userData.data().userName;
@@ -88,6 +90,9 @@ export const store = createStore({
     },
     changeUserName(state, payload) {
       state.profileUserName = payload;
+    },
+    changeAdmin(state, payload) {
+      state.profileAdmin = payload;
     },
   },
   actions: {
@@ -125,6 +130,21 @@ export const store = createStore({
           console.log("Error getting document:", error);
         });
       commit("setProfileInitials");
+    },
+
+    async addAmin({}) {
+      const userId = firebaseAuth.currentUser.uid;
+      const docRef = doc(firestoreDB, "users", userId);
+
+      console.log("ADD ADMIN RED:", docRef);
+
+      // await setDoc(docRef, data, { merge: true })
+      //   .then((respone) => {
+      //     console.log("Document update with ID: ", respone);
+      //   })
+      //   .catch((error) => {
+      //     console.log("Error getting document:", error);
+      //   });
     },
   },
   modules: {},

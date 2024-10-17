@@ -1,6 +1,6 @@
 <script>
+import { useRoute } from "vue-router";
 import { firebaseAuth } from "@/firebase/firebaseInit";
-import { RouterLink, useRoute } from "vue-router";
 import MenuIcon from "@/assets/Icons/bars-regular.svg";
 import UserIcon from "@/assets/Icons/user-alt-light.svg";
 import AdminIcon from "@/assets/Icons/user-crown-light.svg";
@@ -60,6 +60,9 @@ export default {
     user() {
       return this.$store.state.user;
     },
+    isAdmin() {
+      return this.$store.state.profileAdmin;
+    },
   },
 };
 </script>
@@ -84,8 +87,8 @@ export default {
             :to="{ name: 'Blogs' }"
             >Blogs</RouterLink
           >
-          <RouterLink class="link">Create Post</RouterLink>
-          <RouterLink v-if="!user" class="link" :to="{ name: 'Login' }"
+          <RouterLink v-show="isAdmin" class="link">Create Post</RouterLink>
+          <RouterLink v-show="!user" class="link" :to="{ name: 'Login' }"
             >Login/Register</RouterLink
           >
         </ul>
@@ -118,7 +121,11 @@ export default {
                 </RouterLink>
               </div>
               <div class="option">
-                <RouterLink class="option" to="#">
+                <RouterLink
+                  v-show="isAdmin"
+                  class="option"
+                  :to="{ name: 'Admin' }"
+                >
                   <AdminIcon class="icon" />
                   <p>Admin</p>
                 </RouterLink>
@@ -147,7 +154,15 @@ export default {
           :to="{ name: 'Blogs' }"
           >Blogs</RouterLink
         >
-        <RouterLink class="link" to="#">Create Post</RouterLink>
+        <RouterLink
+          v-show="isAdmin"
+          :class="[isActiveLink('/admin') ? 'link link-active' : 'link']"
+          :to="{ name: 'Admin' }"
+          >Admin</RouterLink
+        >
+        <RouterLink v-show="isAdmin" class="link" to="#"
+          >Create Post</RouterLink
+        >
         <RouterLink v-show="!user" class="link" :to="{ name: 'Login' }"
           >Login/Register</RouterLink
         >
