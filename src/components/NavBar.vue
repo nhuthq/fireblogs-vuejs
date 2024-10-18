@@ -87,7 +87,9 @@ export default {
             :to="{ name: 'Blogs' }"
             >Blogs</RouterLink
           >
-          <RouterLink v-show="isAdmin" class="link">Create Post</RouterLink>
+          <RouterLink v-show="isAdmin" class="link" :to="{ name: 'CreatePost' }"
+            >Create Post</RouterLink
+          >
           <RouterLink v-show="!user" class="link" :to="{ name: 'Login' }"
             >Login/Register</RouterLink
           >
@@ -160,7 +162,7 @@ export default {
           :to="{ name: 'Admin' }"
           >Admin</RouterLink
         >
-        <RouterLink v-show="isAdmin" class="link" to="#"
+        <RouterLink v-show="isAdmin" class="link" :to="{ name: 'CreatePost' }"
           >Create Post</RouterLink
         >
         <RouterLink v-show="!user" class="link" :to="{ name: 'Login' }"

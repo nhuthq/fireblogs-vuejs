@@ -14,10 +14,12 @@
             id="blog-photo"
             ref="blogPhoto"
             accept=".jpg, .png, jpeg"
+            @change="fileChange"
           />
           <button
             class="preview"
-            :class="{ 'button-inactive': !this.$store.state.blogPhotoFileURL }"
+            :disabled="!this.$store.state.blogPhotoFileURL"
+            :class="{ 'inactive-button': !this.$store.state.blogPhotoFileURL }"
           >
             Preview Photo
           </button>
@@ -26,6 +28,7 @@
       </div>
       <div class="editor">
         <QuillEditor
+          placeholder="Write your blog content here..."
           :editorOptions="editorSettings"
           v-model="blogHTML"
           useCustomImageHandler
@@ -53,6 +56,7 @@ export default {
   },
   data() {
     return {
+      file: null,
       error: null,
       errorMessage: "",
       editorSettings: {
@@ -61,6 +65,34 @@ export default {
         },
       },
     };
+  },
+  methods: {
+    fileChange() {
+      this.file = this.$refs.blogPhoto.files[0];
+      const fileName = this.file.name;
+      const fileURL = URL.createObjectURL(this.file);
+      this.$store.commit("updateBlogCoverPhotoURL", fileURL);
+      this.$store.commit("updateBlogCoverPhotoName", fileName);
+    },
+  },
+  computed: {
+    profileId: {},
+    blogTitle: {
+      get() {
+        return this.$store.state.blogTitle;
+      },
+      set(payload) {
+        this.$store.commit("updateBlogTitle", payload);
+      },
+    },
+    blogHTML: {
+      get() {
+        return this.$store.state.blogHTML;
+      },
+      set(payload) {
+        this.$store.commit("updateBlogHTML", payload);
+      },
+    },
   },
 };
 </script>
@@ -160,6 +192,10 @@ export default {
       .preview {
         margin-left: 16px;
         text-transform: initial;
+      }
+
+      .inactive-button {
+        background-color: gray;
       }
 
       span {

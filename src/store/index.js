@@ -100,6 +100,18 @@ export const store = createStore({
     changeAdmin(state, payload) {
       state.profileAdmin = payload;
     },
+    updateBlogTitle(state, payload) {
+      state.blogTitle = payload;
+    },
+    updateBlogHTML(state, payload) {
+      state.blogHTML = payload;
+    },
+    updateBlogCoverPhotoName(state, payload) {
+      state.blogPhotoName = payload;
+    },
+    updateBlogCoverPhotoURL(state, payload) {
+      state.blogPhotoFileURL = payload;
+    },
   },
   actions: {
     async getCurrentUser({ commit }) {
