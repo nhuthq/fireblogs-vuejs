@@ -7,7 +7,11 @@
         <p><span>Error: </span>{{ this.errorMessage }}</p>
       </div>
       <div class="blog-info">
-        <input type="text" placeholder="Enter blog title" v-model="blogTitle" />
+        <input
+          type="text"
+          placeholder="Enter blog title"
+          v-model="this.blogTitle"
+        />
         <div class="upload-file">
           <label for="blog-photo">Upload Cover Photo</label>
           <input
@@ -30,15 +34,19 @@
       </div>
       <div class="editor">
         <QuillEditor
+          theme="snow"
+          toolbar="full"
+          v-model:content="this.blogHTML"
+          contentType="html"
           placeholder="Write your blog content here..."
           :editorOptions="editorSettings"
-          v-model="blogHTML"
-          useCustomImageHandler
         />
       </div>
       <div class="blog-actions">
         <button>Publish Blog</button>
-        <RouterLink class="router-button" to="#">Post Review</RouterLink>
+        <RouterLink class="router-button" :to="{ name: 'PostPreview' }"
+          >Post Review</RouterLink
+        >
       </div>
     </div>
   </div>
@@ -86,6 +94,7 @@ export default {
     profileId: {},
     blogTitle: {
       get() {
+        console.log("BLOG TITLE: ", this.$store.state.blogTitle);
         return this.$store.state.blogTitle;
       },
       set(payload) {
