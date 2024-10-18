@@ -64,8 +64,8 @@ export const store = createStore({
     blogPhotoName: null,
     blogPhotoFileURL: null,
     blogPhotoPreview: null,
-    blogTitle: "Title",
-    blogHTML: "Write your blog here",
+    blogTitle: "",
+    blogHTML: "",
   },
   mutations: {
     toggleEditPost(state, payload) {
@@ -101,9 +101,11 @@ export const store = createStore({
       state.profileAdmin = payload;
     },
     updateBlogTitle(state, payload) {
+      console.log("TITLE: ", payload);
       state.blogTitle = payload;
     },
     updateBlogHTML(state, payload) {
+      console.log("HTML: ", payload);
       state.blogHTML = payload;
     },
     updateBlogCoverPhotoName(state, payload) {

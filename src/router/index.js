@@ -8,6 +8,7 @@ import Register from "@/views/Register.vue";
 import CreatePost from "@/views/CreatePost.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 import ForgotPassword from "@/views/ForgotPassword.vue";
+import BlogPostPreview from "@/views/BlogPostPreview.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,6 +75,14 @@ const router = createRouter({
       component: CreatePost,
       meta: {
         title: "Create Post",
+      },
+    },
+    {
+      path: "/post-preview",
+      name: "PostPreview",
+      component: BlogPostPreview,
+      meta: {
+        title: "Post Preview",
       },
     },
     {
