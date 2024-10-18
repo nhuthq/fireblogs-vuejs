@@ -112,6 +112,9 @@ export const store = createStore({
     updateBlogCoverPhotoURL(state, payload) {
       state.blogPhotoFileURL = payload;
     },
+    openPhotoPreview(state) {
+      state.blogPhotoPreview = !state.blogPhotoPreview;
+    },
   },
   actions: {
     async getCurrentUser({ commit }) {

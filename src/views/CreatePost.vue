@@ -1,6 +1,7 @@
 <template>
   <div class="create-post">
     <Loading v-show="loading" />
+    <BlogCoverPreview v-show="this.$store.state.blogPhotoPreview" />
     <div class="container">
       <div :class="{ invisible: !error }" class="error-message">
         <p><span>Error: </span>{{ this.errorMessage }}</p>
@@ -17,6 +18,7 @@
             @change="fileChange"
           />
           <button
+            @click="openPreviewCoverPhoto"
             class="preview"
             :disabled="!this.$store.state.blogPhotoFileURL"
             :class="{ 'inactive-button': !this.$store.state.blogPhotoFileURL }"
@@ -44,6 +46,7 @@
 
 <script>
 import Loading from "@/components/Loading.vue";
+import BlogCoverPreview from "@/components/BlogCoverPreview.vue";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import "@vueup/vue-quill/dist/vue-quill.bubble.css";
@@ -53,6 +56,7 @@ export default {
   components: {
     Loading,
     QuillEditor,
+    BlogCoverPreview,
   },
   data() {
     return {
@@ -73,6 +77,9 @@ export default {
       const fileURL = URL.createObjectURL(this.file);
       this.$store.commit("updateBlogCoverPhotoURL", fileURL);
       this.$store.commit("updateBlogCoverPhotoName", fileName);
+    },
+    openPreviewCoverPhoto() {
+      this.$store.commit("openPhotoPreview");
     },
   },
   computed: {
