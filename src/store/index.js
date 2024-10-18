@@ -60,6 +60,12 @@ export const store = createStore({
     profileLastName: null,
     profileUserName: null,
     profileInitials: null,
+    editPost: null,
+    blogPhotoName: null,
+    blogPhotoFileURL: null,
+    blogPhotoPreview: null,
+    blogTitle: "Title",
+    blogHTML: "Write your blog here",
   },
   mutations: {
     toggleEditPost(state, payload) {
@@ -93,6 +99,18 @@ export const store = createStore({
     },
     changeAdmin(state, payload) {
       state.profileAdmin = payload;
+    },
+    updateBlogTitle(state, payload) {
+      state.blogTitle = payload;
+    },
+    updateBlogHTML(state, payload) {
+      state.blogHTML = payload;
+    },
+    updateBlogCoverPhotoName(state, payload) {
+      state.blogPhotoName = payload;
+    },
+    updateBlogCoverPhotoURL(state, payload) {
+      state.blogPhotoFileURL = payload;
     },
   },
   actions: {

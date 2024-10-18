@@ -30,7 +30,10 @@
               >
             </li>
             <li>
-              <RouterLink v-show="isAdmin" class="link" :to="'#'"
+              <RouterLink
+                v-show="isAdmin"
+                class="link"
+                :to="{ name: 'CreatePost' }"
                 >Create Post</RouterLink
               >
             </li>
