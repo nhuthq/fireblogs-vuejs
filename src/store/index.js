@@ -60,6 +60,12 @@ export const store = createStore({
     profileLastName: null,
     profileUserName: null,
     profileInitials: null,
+    editPost: null,
+    blogPhotoName: null,
+    blogPhotoFileURL: null,
+    blogPhotoPreview: null,
+    blogTitle: "Title",
+    blogHTML: "Write your blog here",
   },
   mutations: {
     toggleEditPost(state, payload) {
