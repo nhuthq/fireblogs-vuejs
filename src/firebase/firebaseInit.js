@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, doc, setDoc, collection } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   getAuth,
   onAuthStateChanged,
@@ -32,11 +33,21 @@ const firestoreDB = getFirestore(firebaseApp);
 // FireAuth
 const firebaseAuth = getAuth();
 
+// Storage
+const firebaseStorage = getStorage(firebaseApp);
+
 export {
   firebaseAuth,
   firebaseApp,
-  firebaseAnalytics,
   firestoreDB,
+  firebaseStorage,
+  firebaseAnalytics,
+  ref,
+  doc,
+  setDoc,
+  collection,
+  uploadBytes,
+  getDownloadURL,
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,

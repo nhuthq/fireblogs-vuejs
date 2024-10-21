@@ -22,8 +22,8 @@
             @change="fileChange"
           />
           <button
-            @click="openPreviewCoverPhoto"
             class="preview"
+            @click="openPreviewCoverPhoto"
             :disabled="!this.$store.state.blogPhotoFileURL"
             :class="{ 'inactive-button': !this.$store.state.blogPhotoFileURL }"
           >
@@ -34,30 +34,51 @@
       </div>
       <div class="editor">
         <QuillEditor
-          theme="snow"
           toolbar="full"
-          v-model:content="this.blogHTML"
+          :modules="modules"
           contentType="html"
+          v-model:content="this.blogHTML"
           placeholder="Write your blog content here..."
-          :editorOptions="editorSettings"
         />
       </div>
       <div class="blog-actions">
-        <button>Publish Blog</button>
-        <RouterLink class="router-button" :to="{ name: 'PostPreview' }"
-          >Post Review</RouterLink
+        <button
+          @click="submitBlog"
+          :class="{
+            'inactive-button': !profileAdmin,
+          }"
         >
+          Publish Blog
+        </button>
+        <button
+          @click="previewBlog"
+          :class="{
+            'inactive-button': !profileAdmin,
+          }"
+        >
+          Post Review
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {
+  ref,
+  doc,
+  setDoc,
+  uploadBytes,
+  firestoreDB,
+  getDownloadURL,
+  firebaseStorage,
+} from "@/firebase/firebaseInit";
+import { QuillEditor } from "@vueup/vue-quill";
 import Loading from "@/components/Loading.vue";
 import BlogCoverPreview from "@/components/BlogCoverPreview.vue";
-import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
-import "@vueup/vue-quill/dist/vue-quill.bubble.css";
+import ImageResize from "quill-image-resize";
+import ImageCompress from "quill-image-compress";
 
 export default {
   name: "Create Post",
@@ -66,35 +87,172 @@ export default {
     QuillEditor,
     BlogCoverPreview,
   },
-  data() {
-    return {
-      file: null,
-      error: null,
-      errorMessage: "",
-      editorSettings: {
-        modules: {
-          imageResize: {},
+  setup: () => {
+    const modules = [
+      {
+        name: "imageResize",
+        module: ImageResize,
+        options: {
+          handleStyles: {
+            backgroundColor: "#303030",
+            border: "none",
+            color: "#303030",
+          },
         },
       },
+      {
+        name: "imageCompress",
+        module: ImageCompress,
+        options: {
+          quality: 0.7, // default
+          imageType: ["image/jpeg", "image/jpg", "image/png"], // default
+          debug: true, // default
+          suppressErrorLogging: false, // default
+          handleOnPaste: true, //default
+          insertIntoEditor: (imageBase64URL, imageBlob, editor) => {
+            const range = editor.getSelection();
+            editor.insertEmbed(
+              range.index,
+              "image",
+              `${imageBase64URL}`,
+              "user"
+            );
+          },
+        },
+      },
+    ];
+    return { modules };
+  },
+  data() {
+    return {
+      loading: false,
+      error: null,
+      errorMessage: "",
+      coverPhotoFile: null,
+      contentAvailable: false,
     };
   },
   methods: {
     fileChange() {
-      this.file = this.$refs.blogPhoto.files[0];
-      const fileName = this.file.name;
-      const fileURL = URL.createObjectURL(this.file);
+      this.coverPhotoFile = this.$refs.blogPhoto.files[0];
+      const fileName = this.coverPhotoFile.name;
+      const fileURL = URL.createObjectURL(this.coverPhotoFile);
       this.$store.commit("updateBlogCoverPhotoURL", fileURL);
       this.$store.commit("updateBlogCoverPhotoName", fileName);
     },
     openPreviewCoverPhoto() {
       this.$store.commit("openPhotoPreview");
     },
+    async submitBlog() {
+      if (this.blogTitle.length === 0 || this.blogHTML.length === 0) {
+        this.error = true;
+
+        this.errorMessage =
+          "Please ensure Blog Title & Blog Post has been filled!";
+        setTimeout(() => {
+          this.error = false;
+        }, 5000);
+
+        return;
+      } else if (!this.blogCoverPhotoName) {
+        this.error = true;
+        this.errorMessage = "Please ensure you uploaded a cover photo!";
+        setTimeout(() => {
+          this.error = false;
+        }, 5000);
+        return;
+      }
+
+      this.loading = true;
+      this.errorMsg = "";
+      this.error = false;
+
+      // Gen unique ID
+      const blogID =
+        new Date().getTime().toString(36) + new Date().getUTCMilliseconds();
+      const coverPhotoName = `${blogID}#${this.blogCoverPhotoName}`;
+      const coverPhotoRef = ref(
+        firebaseStorage,
+        `BlogPostCoverPhotos/${coverPhotoName}`
+      );
+      // Upload the file and metadata
+      const uploadResponst = uploadBytes(
+        coverPhotoRef,
+        this.coverPhotoFile
+      ).then(async () => {
+        try {
+          const timestamp = Date.now();
+          const downloadURL = await getDownloadURL(ref(coverPhotoRef)).catch(
+            (error) => {
+              this.error = true;
+              this.loading = false;
+              this.errorMessage = error;
+              console.error("Error download URL: ", error);
+
+              return;
+            }
+          );
+
+          const blogData = {
+            blogId: blogID,
+            blogTitle: this.blogTitle,
+            blogHTML: this.blogHTML,
+            blogCoverPhoto: downloadURL,
+            blogCoverPhotoName: coverPhotoName,
+            profileId: this.profileId,
+            isPublished: false,
+            createdDate: timestamp,
+            lastEditedDate: timestamp,
+          };
+
+          const blogsDocRef = doc(firestoreDB, "blogs", blogID);
+          await setDoc(blogsDocRef, blogData, { merge: true }).then(() => {
+            this.loading = false;
+          });
+
+          this.error;
+        } catch (error) {
+          this.error = true;
+          this.loading = false;
+          this.errorMessage = error;
+          console.error("Error adding document: ", error);
+          return;
+        }
+      });
+    },
+    previewBlog() {
+      if (this.blogTitle.length === 0 || this.blogHTML.length === 0) {
+        this.error = true;
+        this.errorMessage =
+          "Please ensure Blog Title & Blog Post has been filled!";
+        setTimeout(() => {
+          this.error = false;
+        }, 5000);
+        return;
+      } else if (!this.blogCoverPhotoName) {
+        this.error = true;
+        this.errorMessage = "Please ensure you uploaded a cover photo!";
+        setTimeout(() => {
+          this.error = false;
+        }, 5000);
+
+        return;
+      }
+      this.$router.push({ name: "PostPreview" });
+    },
   },
   computed: {
-    profileId: {},
+    profileAdmin() {
+      return this.$store.state.profileAdmin;
+    },
+    profileId() {
+      return this.$store.state.profileId;
+    },
+    blogCoverPhotoName() {
+      return this.$store.state.blogPhotoName;
+    },
     blogTitle: {
       get() {
-        console.log("BLOG TITLE: ", this.$store.state.blogTitle);
         return this.$store.state.blogTitle;
       },
       set(payload) {
@@ -210,16 +368,17 @@ export default {
         text-transform: initial;
       }
 
-      .inactive-button {
-        background-color: gray;
-      }
-
       span {
         font-size: 16px;
         margin-left: 16px;
         align-self: center;
       }
     }
+  }
+
+  .inactive-button {
+    pointer-events: none;
+    background-color: gray;
   }
 
   .editor {
