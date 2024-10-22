@@ -5,6 +5,7 @@ import Login from "@/views/Login.vue";
 import Admin from "@/views/Admin.vue";
 import Profile from "@/views/Profile.vue";
 import Register from "@/views/Register.vue";
+import ViewBlog from "@/views/ViewBlog.vue";
 import CreatePost from "@/views/CreatePost.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 import ForgotPassword from "@/views/ForgotPassword.vue";
@@ -83,6 +84,15 @@ const router = createRouter({
       component: BlogPostPreview,
       meta: {
         title: "Post Preview",
+      },
+    },
+    {
+      path: "/blog/:blogid",
+      name: "ViewBlog",
+      component: ViewBlog,
+      meta: {
+        title: "View Blog",
+        requiresAuth: false,
       },
     },
     {

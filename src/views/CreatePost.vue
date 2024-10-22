@@ -18,8 +18,8 @@
             type="file"
             id="blog-photo"
             ref="blogPhoto"
-            accept=".jpg, .png, jpeg"
             @change="fileChange"
+            accept=".png, .jpg, ,jpeg"
           />
           <button
             class="preview"
@@ -170,16 +170,13 @@ export default {
       // Gen unique ID
       const blogID =
         new Date().getTime().toString(36) + new Date().getUTCMilliseconds();
-      const coverPhotoName = `${blogID}#${this.blogCoverPhotoName}`;
+      const coverPhotoName = `${blogID}${this.blogCoverPhotoName}`;
       const coverPhotoRef = ref(
         firebaseStorage,
         `BlogPostCoverPhotos/${coverPhotoName}`
       );
       // Upload the file and metadata
-      const uploadResponst = uploadBytes(
-        coverPhotoRef,
-        this.coverPhotoFile
-      ).then(async () => {
+      uploadBytes(coverPhotoRef, this.coverPhotoFile).then(async () => {
         try {
           const timestamp = Date.now();
           const downloadURL = await getDownloadURL(ref(coverPhotoRef)).catch(
@@ -206,11 +203,18 @@ export default {
           };
 
           const blogsDocRef = doc(firestoreDB, "blogs", blogID);
-          await setDoc(blogsDocRef, blogData, { merge: true }).then(() => {
-            this.loading = false;
-          });
-
-          this.error;
+          await setDoc(blogsDocRef, blogData, { merge: true }).then(
+            async () => {
+              await this.$store.dispatch("getPosts");
+              setTimeout(() => {
+                this.loading = false;
+                this.$router.push({
+                  name: "ViewBlog",
+                  params: { blogid: blogsDocRef.id },
+                });
+              }, 2000);
+            }
+          );
         } catch (error) {
           this.error = true;
           this.loading = false;

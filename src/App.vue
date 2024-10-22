@@ -31,13 +31,14 @@ export default {
   },
   created() {
     this.checkRoute();
-
     firebaseAuth.onAuthStateChanged((user) => {
       this.$store.commit("updateUser", user);
       if (user) {
         this.$store.dispatch("getCurrentUser");
       }
     });
+
+    this.$store.dispatch("getPosts");
   },
   watch: {
     $route() {
@@ -49,7 +50,7 @@ export default {
 
 <template>
   <div>
-    <div class="app">
+    <div class="app" v-if="this.$store.state.postLoaded">
       <NavBar v-if="navigation" />
       <RouterView />
       <Footer v-if="navigation" />

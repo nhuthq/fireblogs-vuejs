@@ -1,58 +1,20 @@
 import { createStore } from "vuex";
-import { firestoreDB, firebaseAuth } from "@/firebase/firebaseInit";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import {
+  firestoreDB,
+  firebaseAuth,
+  doc,
+  getDoc,
+  getDocs,
+  collection,
+  query,
+} from "@/firebase/firebaseInit";
 
 export const store = createStore({
   state: {
-    sampleBlogCards: [
-      {
-        title: "Nha Trang",
-        cover: "nhatrang",
-        date: "Oct 17, 2024",
-      },
-      {
-        title: "Da Nang",
-        cover: "danang",
-        date: "Oct 17, 2024",
-      },
-      {
-        title: "Hoi An",
-        cover: "hoian",
-        date: "Oct 19, 2024",
-      },
-      {
-        title: "Ho Chi Minh",
-        cover: "hcm",
-        date: "Oct 21, 2024",
-      },
-      {
-        title: "Phu Quoc",
-        cover: "phuquoc",
-        date: "Oct 23, 2024",
-      },
-      {
-        title: "Phu Quoc Wonderland",
-        cover: "phuquocwonder",
-        date: "Oct 23, 2024",
-      },
-      {
-        title: "Vung Tau",
-        cover: "vungtau",
-        date: "Oct 25, 2024",
-      },
-      {
-        title: "Ky Co",
-        cover: "kyco",
-        date: "Oct 27, 2024",
-      },
-      {
-        title: "Ha Noi",
-        cover: "hanoi",
-        date: "Oct 30, 2024",
-      },
-    ],
+    blogPosts: [],
     user: null,
     editPost: null,
+    postLoaded: null,
     profileId: null,
     profileAdmin: null,
     profileEmail: null,
@@ -66,6 +28,15 @@ export const store = createStore({
     blogPhotoPreview: null,
     blogTitle: "",
     blogHTML: "",
+  },
+  getters: {
+    blogPostFeeds(state) {
+      return state.blogPosts.slice(0, 2);
+    },
+    blogPostCards(state) {
+      console.log("ALL", state.blogPosts);
+      return state.blogPosts.slice(2, 10);
+    },
   },
   mutations: {
     toggleEditPost(state, payload) {
@@ -119,7 +90,6 @@ export const store = createStore({
   actions: {
     async getCurrentUser({ commit }) {
       const docRef = doc(firestoreDB, "users", firebaseAuth.currentUser.uid);
-
       await getDoc(docRef)
         .then((data) => {
           if (data.exists) {
@@ -133,6 +103,29 @@ export const store = createStore({
         .catch((error) => {
           console.log("Error getting document:", error);
         });
+    },
+
+    async getPosts({ state }) {
+      const querySnapshot = await getDocs(collection(firestoreDB, "blogs"));
+      querySnapshot.forEach((doc) => {
+        if (!state.blogPosts.some((post) => post.blogId === doc.id)) {
+          const docData = doc.data();
+          const data = {
+            blogId: docData.blogId,
+            blogTitle: docData.blogTitle,
+            blogHTML: docData.blogHTML,
+            blogCoverPhoto: docData.blogCoverPhoto,
+            blogCoverPhotoName: docData.blogCoverPhotoName,
+            profileId: docData.profileId,
+            isPublished: docData.isPublished,
+            createdDate: docData.createdDate,
+            lastEditedDate: docData.lastEditedDate,
+          };
+          state.blogPosts.push(data);
+        }
+      });
+
+      state.postLoaded = true;
     },
     async updateUserSettings({ commit, state }) {
       const data = {

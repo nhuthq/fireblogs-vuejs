@@ -1,6 +1,14 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, doc, setDoc, collection } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  query,
+  getDoc,
+  setDoc,
+  getDocs,
+  collection,
+} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   getAuth,
@@ -44,7 +52,10 @@ export {
   firebaseAnalytics,
   ref,
   doc,
+  query,
+  getDoc,
   setDoc,
+  getDocs,
   collection,
   uploadBytes,
   getDownloadURL,

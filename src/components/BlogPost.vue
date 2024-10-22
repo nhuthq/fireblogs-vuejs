@@ -2,21 +2,27 @@
   <div class="blog-wrapper" :class="{ 'no-user': !user }">
     <div class="blog-content">
       <div>
-        <h2 v-if="post.welcomeScreen">{{ post.title }}</h2>
-        <h2 v-else>{{ post.title }}</h2>
+        <h2 v-if="post.welcomeScreen">{{ post.blogTitle }}</h2>
+        <h2 v-else>{{ post.blogTitle }}</h2>
         <p v-if="post.welcomeScreen">{{ post.content }}</p>
-        <p v-else class="content-preview">{{ post.html }}</p>
-        <RouterLink class="link link-light" v-if="post.welcomeScreen" to="#"
+        <p v-else class="content-preview" v-html="post.blogHTML" />
+        <RouterLink
+          class="link link-light"
+          v-if="post.welcomeScreen"
+          :to="{ name: 'Login' }"
           >Login/Register <Arrow class="arrow arrow-light" />
         </RouterLink>
-        <RouterLink class="link" v-else to="#"
+        <RouterLink
+          class="link"
+          v-else
+          :to="{ name: 'ViewBlog', params: { blogid: post.blogId } }"
           >View The Post<Arrow class="arrow"
         /></RouterLink>
       </div>
     </div>
     <div class="blog-photo">
       <img v-if="post.welcomeScreen" :src="getImage(post.photo)" alt="photo" />
-      <img v-else :src="getImage(post.cover)" alt="cover" />
+      <img v-else :src="post.blogCoverPhoto" :alt="post.blogCoverPhotoName" />
     </div>
   </div>
 </template>
