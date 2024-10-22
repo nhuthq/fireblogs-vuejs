@@ -1,5 +1,5 @@
 <template>
-  <div class="blog-card">
+  <div @click="viewPost" class="blog-card">
     <div v-show="editPost" class="icons">
       <div class="icon">
         <Edit class="edit" />
@@ -8,11 +8,20 @@
         <Delete class="delete" />
       </div>
     </div>
-    <img :src="getImage(post.cover)" alt="thumbnail" />
+    <img :src="post.blogCoverPhoto" :alt="post.blogCoverPhotoName" />
     <div class="info">
-      <h4>{{ post.title }}</h4>
-      <h6>Posted on: {{ post.date }}</h6>
-      <RouterLink class="link" to="#"
+      <h4>{{ post.blogTitle }}</h4>
+      <h6>
+        Posted on:
+        {{
+          new Date(post.createdDate).toLocaleString("en-us", {
+            dateStyle: "long",
+          })
+        }}
+      </h6>
+      <RouterLink
+        class="link"
+        :to="{ name: 'ViewBlog', params: { blogid: post.blogId } }"
         >View The Post <Arrow class="arrow"
       /></RouterLink>
     </div>
@@ -20,21 +29,10 @@
 </template>
 
 <script>
-// MockData
-import danang from "@/assets/thumbnail/danang.jpg";
-import nhatrang from "@/assets/thumbnail/nhatrang.jpg";
-import hoian from "@/assets/thumbnail/hoian.jpg";
-import kyco from "@/assets/thumbnail/kyco.jpg";
-import vungtau from "@/assets/thumbnail/vungtau.jpg";
-import hanoi from "@/assets/thumbnail/hanoi.jpg";
-import hcm from "@/assets/thumbnail/hcm.jpg";
-import phuquoc from "@/assets/thumbnail/phuquoc.jpg";
-import phuquocwonder from "@/assets/thumbnail/phuquocwonder.jpg";
-
-import Arrow from "@/assets/Icons/arrow-right-light.svg";
+import { RouterLink } from "vue-router";
 import Edit from "@/assets/Icons/edit-regular.svg";
 import Delete from "@/assets/Icons/trash-regular.svg";
-import { RouterLink } from "vue-router";
+import Arrow from "@/assets/Icons/arrow-right-light.svg";
 
 export default {
   name: "BlogCard",
@@ -43,22 +41,14 @@ export default {
   methods: {
     deletePost() {},
     editBlog() {},
-    getImage(imageName) {
-      const mockImages = [
-        { name: "danang", value: danang },
-        { name: "nhatrang", value: nhatrang },
-        { name: "hoian", value: hoian },
-        { name: "kyco", value: kyco },
-        { name: "vungtau", value: vungtau },
-        { name: "hanoi", value: hanoi },
-        { name: "hcm", value: hcm },
-        { name: "phuquoc", value: phuquoc },
-        { name: "phuquocwonder", value: phuquocwonder },
-      ];
-      return mockImages.filter((item) => item.name === imageName)[0].value;
-    },
   },
   computed: {
+    viewPost() {
+      this.$router.push({
+        name: "ViewBlog",
+        params: { blogid: this.post.blogId },
+      });
+    },
     editPost() {
       return this.$store.state.editPost;
     },
