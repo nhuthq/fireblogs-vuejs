@@ -5,8 +5,8 @@ import {
   doc,
   getDoc,
   getDocs,
+  deleteDoc,
   collection,
-  query,
 } from "@/firebase/firebaseInit";
 
 export const store = createStore({
@@ -44,7 +44,12 @@ export const store = createStore({
     },
     updateUser(state, payload) {
       state.user = payload;
-      console.log("updateUser:", payload);
+    },
+    filterBlogPost(state, payload) {
+      console.log("Payload: ", payload);
+      state.blogPosts = state.blogPosts.filter(
+        (post) => post.blogId !== payload
+      );
     },
     setProfileInfo(state, userData) {
       state.profileId = userData.id;
@@ -106,8 +111,8 @@ export const store = createStore({
     },
 
     async getPosts({ state }) {
-      const querySnapshot = await getDocs(collection(firestoreDB, "blogs"));
-      querySnapshot.forEach((doc) => {
+      const blogsSnapshot = await getDocs(collection(firestoreDB, "blogs"));
+      blogsSnapshot.forEach((doc) => {
         if (!state.blogPosts.some((post) => post.blogId === doc.id)) {
           const docData = doc.data();
           const data = {
@@ -126,6 +131,11 @@ export const store = createStore({
       });
 
       state.postLoaded = true;
+    },
+    async deletePost({ commit }, payload) {
+      await deleteDoc(doc(firestoreDB, "blogs", payload)).then(() => {
+        commit("filterBlogPost", payload);
+      });
     },
     async updateUserSettings({ commit, state }) {
       const data = {

@@ -1,14 +1,23 @@
 <template>
-  <div @click="viewPost" class="blog-card">
+  <div class="blog-card">
+    <ConfirmDialog
+      v-if="confirmActiveDialog"
+      v-on:confirm="deletePost"
+      v-on:closeModal="closeModal"
+    />
     <div v-show="editPost" class="icons">
       <div class="icon">
         <Edit class="edit" />
       </div>
-      <div class="icon">
+      <div class="icon" @click="confirmDelete">
         <Delete class="delete" />
       </div>
     </div>
-    <img :src="post.blogCoverPhoto" :alt="post.blogCoverPhotoName" />
+    <img
+      @click="viewPost"
+      :src="post.blogCoverPhoto"
+      :alt="post.blogCoverPhotoName"
+    />
     <div class="info">
       <h4>{{ post.blogTitle }}</h4>
       <h6>
@@ -30,16 +39,32 @@
 
 <script>
 import { RouterLink } from "vue-router";
+
 import Edit from "@/assets/Icons/edit-regular.svg";
 import Delete from "@/assets/Icons/trash-regular.svg";
 import Arrow from "@/assets/Icons/arrow-right-light.svg";
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
 
 export default {
   name: "BlogCard",
   props: ["post"],
-  components: { Arrow, Edit, Delete, RouterLink },
+  components: { Arrow, Edit, Delete, RouterLink, ConfirmDialog },
+  data() {
+    return {
+      confirmActiveDialog: false,
+    };
+  },
   methods: {
-    deletePost() {},
+    confirmDelete() {
+      this.confirmActiveDialog = true;
+    },
+    closeModal() {
+      this.confirmActiveDialog = !this.confirmActiveDialog;
+    },
+    deletePost() {
+      this.$store.dispatch("deletePost", this.post.blogId);
+      this.confirmActiveDialog = !this.confirmActiveDialog;
+    },
     editBlog() {},
   },
   computed: {
