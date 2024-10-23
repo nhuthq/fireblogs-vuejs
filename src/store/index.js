@@ -23,7 +23,7 @@ export const store = createStore({
     profileUserName: null,
     profileInitials: null,
     editPost: null,
-    blogPhotoName: null,
+    blogCoverPhotoName: null,
     blogPhotoFileURL: null,
     blogPhotoPreview: null,
     blogTitle: "",
@@ -59,6 +59,12 @@ export const store = createStore({
       state.profileLastName = userData.data().lastName;
       state.profileUserName = userData.data().userName;
     },
+    setBlogState(state, payload) {
+      state.blogTitle = payload.blogTitle;
+      state.blogHTML = payload.blogHTML;
+      state.blogPhotoFileURL = payload.blogPhotoFileURL;
+      state.blogCoverPhotoName = payload.blogCoverPhotoName;
+    },
     setProfileInitials(state) {
       state.profileInitials =
         state.profileFirstName.match(/(\b\S)?/g).join("") +
@@ -83,7 +89,7 @@ export const store = createStore({
       state.blogHTML = payload;
     },
     updateBlogCoverPhotoName(state, payload) {
-      state.blogPhotoName = payload;
+      state.blogCoverPhotoName = payload;
     },
     updateBlogCoverPhotoURL(state, payload) {
       state.blogPhotoFileURL = payload;
@@ -131,6 +137,10 @@ export const store = createStore({
       });
 
       state.postLoaded = true;
+    },
+    async updatePost({ commit, dispatch }, payload) {
+      commit("filterBlogPost", payload);
+      await dispatch("getPosts");
     },
     async deletePost({ commit }, payload) {
       await deleteDoc(doc(firestoreDB, "blogs", payload)).then(() => {

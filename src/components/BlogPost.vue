@@ -15,7 +15,7 @@
         <RouterLink
           class="link"
           v-else
-          :to="{ name: 'ViewBlog', params: { blogid: post.blogId } }"
+          :to="{ name: 'ViewBlog', params: { blogId: post.blogId } }"
           >View The Post<Arrow class="arrow"
         /></RouterLink>
       </div>

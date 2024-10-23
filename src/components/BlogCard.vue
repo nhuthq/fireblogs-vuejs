@@ -6,7 +6,7 @@
       v-on:closeModal="closeModal"
     />
     <div v-show="editPost" class="icons">
-      <div class="icon">
+      <div class="icon" @click="editBlog">
         <Edit class="edit" />
       </div>
       <div class="icon" @click="confirmDelete">
@@ -30,7 +30,7 @@
       </h6>
       <RouterLink
         class="link"
-        :to="{ name: 'ViewBlog', params: { blogid: post.blogId } }"
+        :to="{ name: 'ViewBlog', params: { blogId: this.post.blogId } }"
         >View The Post <Arrow class="arrow"
       /></RouterLink>
     </div>
@@ -65,15 +65,20 @@ export default {
       this.$store.dispatch("deletePost", this.post.blogId);
       this.confirmActiveDialog = !this.confirmActiveDialog;
     },
-    editBlog() {},
-  },
-  computed: {
+    editBlog() {
+      this.$router.push({
+        name: "EditBlog",
+        params: { blogId: this.post.blogId },
+      });
+    },
     viewPost() {
       this.$router.push({
         name: "ViewBlog",
-        params: { blogid: this.post.blogId },
+        params: { blogId: this.post.blogId },
       });
     },
+  },
+  computed: {
     editPost() {
       return this.$store.state.editPost;
     },
