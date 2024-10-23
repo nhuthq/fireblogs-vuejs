@@ -21,6 +21,7 @@ const router = createRouter({
       component: Home,
       meta: {
         title: "Home",
+        requiresAuth: false,
       },
     },
     {
@@ -29,6 +30,7 @@ const router = createRouter({
       component: Blogs,
       meta: {
         title: "Blogs",
+        requiresAuth: false,
       },
     },
     {
@@ -37,6 +39,7 @@ const router = createRouter({
       component: Login,
       meta: {
         title: "Login",
+        requiresAuth: false,
       },
     },
     {
@@ -45,6 +48,7 @@ const router = createRouter({
       component: Register,
       meta: {
         title: "Register",
+        requiresAuth: false,
       },
     },
     {
@@ -53,6 +57,7 @@ const router = createRouter({
       component: ForgotPassword,
       meta: {
         title: "Fogot Password",
+        requiresAuth: false,
       },
     },
     {
@@ -61,6 +66,7 @@ const router = createRouter({
       component: Profile,
       meta: {
         title: "Profile",
+        requiresAuth: true,
       },
     },
     {
@@ -69,6 +75,8 @@ const router = createRouter({
       component: Admin,
       meta: {
         title: "Admin",
+        requiresAuth: true,
+        requiresAdmin: true,
       },
     },
     {
@@ -77,6 +85,8 @@ const router = createRouter({
       component: CreatePost,
       meta: {
         title: "Create Post",
+        requiresAuth: true,
+        requiresAdmin: true,
       },
     },
     {
@@ -85,6 +95,8 @@ const router = createRouter({
       component: BlogPostPreview,
       meta: {
         title: "Post Preview",
+        requiresAuth: true,
+        requiresAdmin: true,
       },
     },
     {
@@ -102,6 +114,8 @@ const router = createRouter({
       component: EditBlog,
       meta: {
         title: "Edit Blog",
+        requiresAuth: true,
+        requiresAdmin: true,
       },
     },
     {
@@ -118,6 +132,30 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | FireBlogs`;
   next();
+});
+
+router.beforeEach(async (to, from, next) => {
+  let user = firebaseAuth.currentUser;
+  let admin = null;
+
+  if (user) {
+    let token = await user.getIdTokenResult();
+    admin = token.claims.admin;
+  }
+
+  if (to.matched.some((res) => res.meta.requiresAuth)) {
+    if (user) {
+      if (to.matched.some((res) => res.meta.requiresAdmin)) {
+        if (admin) {
+          return next();
+        }
+        return next({ name: "Home" });
+      }
+      return next();
+    }
+    return next({ name: "Home" });
+  }
+  return next();
 });
 
 export default router;
