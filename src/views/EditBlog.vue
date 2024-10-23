@@ -43,12 +43,12 @@
       </div>
       <div class="blog-actions">
         <button
-          @click="submitBlog"
+          @click="updateBlog"
           :class="{
             'inactive-button': !profileAdmin,
           }"
         >
-          Publish Blog
+          Save Changes
         </button>
         <button
           @click="previewBlog"
@@ -67,9 +67,10 @@
 import {
   ref,
   doc,
-  setDoc,
+  updateDoc,
   uploadBytes,
   firestoreDB,
+  deleteObject,
   getDownloadURL,
   firebaseStorage,
 } from "@/firebase/firebaseInit";
@@ -81,12 +82,13 @@ import ImageResize from "quill-image-resize";
 import ImageCompress from "quill-image-compress";
 
 export default {
-  name: "Create Blog",
+  name: "EditBlog",
   components: {
     Loading,
     QuillEditor,
     BlogCoverPreview,
   },
+
   setup: () => {
     const modules = [
       {
@@ -127,10 +129,19 @@ export default {
     return {
       loading: false,
       error: null,
+      routeID: null,
       errorMessage: "",
+      currentBlog: null,
       coverPhotoFile: null,
       contentAvailable: false,
     };
+  },
+  async mounted() {
+    this.routeID = this.$route.params.blogId;
+    this.currentBlog = await this.$store.state.blogPosts.filter((post) => {
+      return post.blogId === this.routeID;
+    });
+    this.$store.commit("setBlogState", this.currentBlog[0]);
   },
   methods: {
     fileChange() {
@@ -143,10 +154,9 @@ export default {
     openPreviewCoverPhoto() {
       this.$store.commit("openPhotoPreview");
     },
-    async submitBlog() {
+    async updateBlog() {
       if (this.blogTitle.length === 0 || this.blogHTML.length === 0) {
         this.error = true;
-
         this.errorMessage =
           "Please ensure Blog Title & Blog Post has been filled!";
         setTimeout(() => {
@@ -154,75 +164,100 @@ export default {
         }, 5000);
 
         return;
-      } else if (!this.blogCoverPhotoName) {
-        this.error = true;
-        this.errorMessage = "Please ensure you uploaded a cover photo!";
-        setTimeout(() => {
-          this.error = false;
-        }, 5000);
-        return;
       }
-
       this.loading = true;
       this.errorMsg = "";
       this.error = false;
 
-      // Gen unique ID
-      const blogID =
-        new Date().getTime().toString(36) + new Date().getUTCMilliseconds();
-      const coverPhotoName = `${blogID}${this.blogCoverPhotoName}`;
-      const coverPhotoRef = ref(
-        firebaseStorage,
-        `BlogPostCoverPhotos/${coverPhotoName}`
-      );
-      // Upload the file and metadata
-      uploadBytes(coverPhotoRef, this.coverPhotoFile).then(async () => {
-        try {
-          const timestamp = Date.now();
+      const editedTime = Date.now();
+
+      if (this.coverPhotoFile) {
+        setTimeout(() => {
+          this.loading = false;
+        }, 1000);
+
+        // Delete previous cover
+        const previousCoverName = this.currentBlog[0].blogCoverPhotoName;
+        const previousCoverRef = ref(
+          firebaseStorage,
+          `BlogPostCoverPhotos/${previousCoverName}`
+        );
+
+        console.log("CURRENT BLOG: ", this.currentBlog[0].blogCoverPhotoName);
+
+        // Delete the file
+        await deleteObject(previousCoverRef)
+          .then(() => {
+            console.log("FILE DELETED: ");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+        const coverPhotoName = `${this.routeID}${this.blogCoverPhotoName}`;
+        const coverPhotoRef = ref(
+          firebaseStorage,
+          `BlogPostCoverPhotos/${coverPhotoName}`
+        );
+        console.log("NEW COVER REF: ", coverPhotoRef);
+
+        uploadBytes(coverPhotoRef, this.coverPhotoFile).then(async () => {
           const downloadURL = await getDownloadURL(ref(coverPhotoRef)).catch(
             (error) => {
               this.error = true;
-              this.loading = false;
               this.errorMessage = error;
               console.error("Error download URL: ", error);
-
-              return;
             }
           );
 
           const blogData = {
-            blogId: blogID,
             blogTitle: this.blogTitle,
             blogHTML: this.blogHTML,
             blogCoverPhoto: downloadURL,
             blogCoverPhotoName: coverPhotoName,
-            profileId: this.profileId,
-            isPublished: false,
-            createdDate: timestamp,
-            lastEditedDate: timestamp,
+            lastEditedDate: editedTime,
           };
 
-          const blogsDocRef = doc(firestoreDB, "blogs", blogID);
-          await setDoc(blogsDocRef, blogData, { merge: true }).then(
-            async () => {
-              await this.$store.dispatch("getPosts");
-              setTimeout(() => {
-                this.loading = false;
-                this.$router.push({
-                  name: "ViewBlog",
-                  params: { blogId: blogsDocRef.id },
-                });
-              }, 2000);
-            }
-          );
-        } catch (error) {
-          this.error = true;
-          this.loading = false;
-          this.errorMessage = error;
-          console.error("Error adding document: ", error);
-          return;
-        }
-      });
+          const blogsDocRef = doc(firestoreDB, "blogs", this.routeID);
+
+          await updateDoc(blogsDocRef, blogData)
+            .then(async () => {
+              await this.$store.dispatch("updatePost", this.routeID);
+
+              this.$router.push({
+                name: "ViewBlog",
+                params: { blogId: this.routeID },
+              });
+            })
+            .catch((error) => {
+              this.error = true;
+              this.errorMessage = error;
+              return;
+            });
+        });
+        this.loading = false;
+      } else {
+        const blogsDocRef = doc(firestoreDB, "blogs", this.routeID);
+
+        await updateDoc(blogsDocRef, {
+          blogTitle: this.blogTitle,
+          blogHTML: this.blogHTML,
+          lastEditedDate: editedTime,
+        })
+          .then(async () => {
+            await this.$store.dispatch("updatePost", this.routeID);
+            this.loading = false;
+            this.$router.push({
+              name: "ViewBlog",
+              params: { blogId: this.routeID },
+            });
+          })
+          .catch((error) => {
+            this.loading = false;
+            this.error = true;
+            this.errorMessage = error;
+          });
+      }
     },
     previewBlog() {
       if (this.blogTitle.length === 0 || this.blogHTML.length === 0) {

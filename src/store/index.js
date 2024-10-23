@@ -5,8 +5,8 @@ import {
   doc,
   getDoc,
   getDocs,
+  deleteDoc,
   collection,
-  query,
 } from "@/firebase/firebaseInit";
 
 export const store = createStore({
@@ -23,7 +23,7 @@ export const store = createStore({
     profileUserName: null,
     profileInitials: null,
     editPost: null,
-    blogPhotoName: null,
+    blogCoverPhotoName: null,
     blogPhotoFileURL: null,
     blogPhotoPreview: null,
     blogTitle: "",
@@ -44,7 +44,12 @@ export const store = createStore({
     },
     updateUser(state, payload) {
       state.user = payload;
-      console.log("updateUser:", payload);
+    },
+    filterBlogPost(state, payload) {
+      console.log("Payload: ", payload);
+      state.blogPosts = state.blogPosts.filter(
+        (post) => post.blogId !== payload
+      );
     },
     setProfileInfo(state, userData) {
       state.profileId = userData.id;
@@ -53,6 +58,12 @@ export const store = createStore({
       state.profileFirstName = userData.data().firstName;
       state.profileLastName = userData.data().lastName;
       state.profileUserName = userData.data().userName;
+    },
+    setBlogState(state, payload) {
+      state.blogTitle = payload.blogTitle;
+      state.blogHTML = payload.blogHTML;
+      state.blogPhotoFileURL = payload.blogPhotoFileURL;
+      state.blogCoverPhotoName = payload.blogCoverPhotoName;
     },
     setProfileInitials(state) {
       state.profileInitials =
@@ -78,7 +89,7 @@ export const store = createStore({
       state.blogHTML = payload;
     },
     updateBlogCoverPhotoName(state, payload) {
-      state.blogPhotoName = payload;
+      state.blogCoverPhotoName = payload;
     },
     updateBlogCoverPhotoURL(state, payload) {
       state.blogPhotoFileURL = payload;
@@ -106,8 +117,8 @@ export const store = createStore({
     },
 
     async getPosts({ state }) {
-      const querySnapshot = await getDocs(collection(firestoreDB, "blogs"));
-      querySnapshot.forEach((doc) => {
+      const blogsSnapshot = await getDocs(collection(firestoreDB, "blogs"));
+      blogsSnapshot.forEach((doc) => {
         if (!state.blogPosts.some((post) => post.blogId === doc.id)) {
           const docData = doc.data();
           const data = {
@@ -126,6 +137,15 @@ export const store = createStore({
       });
 
       state.postLoaded = true;
+    },
+    async updatePost({ commit, dispatch }, payload) {
+      commit("filterBlogPost", payload);
+      await dispatch("getPosts");
+    },
+    async deletePost({ commit }, payload) {
+      await deleteDoc(doc(firestoreDB, "blogs", payload)).then(() => {
+        commit("filterBlogPost", payload);
+      });
     },
     async updateUserSettings({ commit, state }) {
       const data = {

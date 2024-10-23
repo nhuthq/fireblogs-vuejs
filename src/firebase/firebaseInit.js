@@ -7,9 +7,17 @@ import {
   getDoc,
   setDoc,
   getDocs,
+  deleteDoc,
+  updateDoc,
   collection,
 } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  ref,
+  getStorage,
+  uploadBytes,
+  deleteObject,
+  getDownloadURL,
+} from "firebase/storage";
 import {
   getAuth,
   onAuthStateChanged,
@@ -56,8 +64,11 @@ export {
   getDoc,
   setDoc,
   getDocs,
+  deleteDoc,
+  updateDoc,
   collection,
   uploadBytes,
+  deleteObject,
   getDownloadURL,
   onAuthStateChanged,
   sendPasswordResetEmail,

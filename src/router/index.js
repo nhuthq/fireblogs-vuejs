@@ -6,6 +6,7 @@ import Admin from "@/views/Admin.vue";
 import Profile from "@/views/Profile.vue";
 import Register from "@/views/Register.vue";
 import ViewBlog from "@/views/ViewBlog.vue";
+import EditBlog from "@/views/EditBlog.vue";
 import CreatePost from "@/views/CreatePost.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 import ForgotPassword from "@/views/ForgotPassword.vue";
@@ -87,12 +88,20 @@ const router = createRouter({
       },
     },
     {
-      path: "/blog/:blogid",
+      path: "/blog/:blogId",
       name: "ViewBlog",
       component: ViewBlog,
       meta: {
         title: "View Blog",
         requiresAuth: false,
+      },
+    },
+    {
+      path: "/blog/edit/:blogId",
+      name: "EditBlog",
+      component: EditBlog,
+      meta: {
+        title: "Edit Blog",
       },
     },
     {
