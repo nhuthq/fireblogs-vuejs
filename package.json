@@ -1,25 +1,33 @@
 {
   "name": "fire-blogs-vuejs",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueup/vue-quill": "^1.2.0",
     "core-js": "3.38.1",
+    "firebase": "^10.14.1",
+    "quill": "^2.0.2",
+    "quill-image-compress": "^2.0.3",
+    "quill-image-resize": "^3.0.9",
     "quill-image-resize-module": "^3.0.0",
+    "quill-image-uploader": "^1.3.0",
+    "quill-resize-image": "^1.0.5",
     "vue": "^3.4.29",
     "vue-router": "^4.4.5",
-    "vue-svg-loader": "^0.12.0",
     "vue3-editor": "^0.1.1",
-    "vue3-quill": "0.3.1",
+    "vue3-quill": "^0.3.1",
+    "vuejs-confirm-dialog": "^0.5.2",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
-    "vite": "^5.3.1"
+    "sass-embedded": "^1.79.4",
+    "vite": "^5.3.1",
+    "vite-svg-loader": "^5.1.0"
   }
 }
